@@ -1,0 +1,130 @@
+html
+  head
+    include ./includes/librerias.jade
+    |     
+    script(type='text/javascript', src='js/codigo_ver_avisos.js')
+    |     
+    link(rel='stylesheet', type='text/css', href='//cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.1.0/material.min.css')
+    |     
+    link(rel='stylesheet', type='text/css', href='https://cdn.datatables.net/1.10.16/css/dataTables.material.min.css')
+    |     
+    link(rel='stylesheet', type='text/css', href='https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css')
+    |     
+    script(type='text/javascript', src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js")
+    |          
+    script(type='text/javascript', src="https://cdn.datatables.net/1.10.16/js/dataTables.material.min.js")
+    |          
+    script(type='text/javascript').
+      $(document).ready(function(){
+        $('table.display').DataTable({
+          language: {
+                "zeroRecords": "Sin Concidencias",
+                "info": "Mostrado página _PAGE_ de _PAGES_, _START_ a _END_ de _TOTAL_ registros",
+                "infoEmpty": "No hay registros disponibles",
+                "infoFiltered": "(filtrado de los _MAX_ registros totales)",
+                "lengthMenu": "Mostrar _MENU_ registros por página",
+                "search": "Buscar:",
+                "paginate": {
+                  "first":      "Primero",
+                  "last":       "Ultimo",
+                  "next":       "Siguiente",
+                  "previous":   "Aterior"
+                },
+                'searchPlaceholder': "Buscar Registros"
+              }
+
+        });
+      });
+    |   
+    style.
+      *{
+      box-sizing: border-box;
+      }
+  |   
+  body
+    // AQUIE SE MOSTRARAN LAS OPCIONES DEL ADMIN
+    include ./includes/opciones_admin_menu.jade
+    |     
+    include ./includes/barra_menu_admin.jade
+    |     
+    // Contenido de la PAGINA
+    #contenedor.container(style='padding-right: 5px;')
+      .row.col.s12
+        ul#tabs-swipe-demo.tabs
+          li.tab.col.s6.m6.l6
+            a.active.blue-text.text-darken-1(href='#tabla_avisos') Lista de Avisos
+          |             
+          li.tab.col.s6.m6.l6
+            a.blue-text.text-darken-1(href='#nuevo_aviso') Nuevo Aviso
+          |            
+      |       
+      #tabla_avisos.row(style='border-style: solid; border-radius: 8px; padding-right: 5px; ')
+        // Tabla        
+        .col.s11(style='text-align: center; overflow:scroll; height: 69%; width: 100%; ')
+          table#contenido_tabla.display(width="100%")
+            thead#head_tabla
+              tr
+                th(style='width: 10%;') ID
+                |                   
+                th(style='width: 30%;') Nombre Aviso
+                |                   
+                th(style='width: 30%;') Descripción Aviso
+                |                   
+                th(style='width: 20%;') Fecha
+                |                   
+                th(style='width: 10%;') Eliminar
+            |             
+            tbody#body_tabla
+              each item in listaAvisos
+                tr(id= item.id)
+                  td #{item.id}
+                  |                 
+                  td #{item.nombre_aviso}
+                  |                 
+                  td #{item.descripcion}
+                  |                 
+                  td #{item.fecha}
+                  |                 
+                  td(style='text-align: center;')
+                    button.btn-floating.transparent(type='button', onclick='eliminar_aviso(\'#{item.id}\')')
+                      i.material-icons.prefix
+                        img(src='asset/ico/delete.png', width='32', height='32')
+      #nuevo_aviso.row
+        form#nuevo_avisoForm(action='/nuevo_aviso', method='post', style='margin-top: 25px;border-style: solid; border-radius: 8px;', name='nuevo_aviso')
+            fieldset(style='')
+              legend.red-text.text-darken-4(style='text-align: center;') Datos del Aviso
+              |               
+              #aviso_contenido.row
+                .row
+                  .col.s1.m1.l1
+                  .input-field.col.s5.m5.l5(style='text-align: center; margin-left: 15px;')
+                    input#nombre.teal-text.text-darken-3(type='text', name='nombre', data-length='45' style='margin-top: 6px;')
+                    |                     
+                    label.active(for='nombre') Nombre del Aviso
+                  |                   
+                  .col.s3.m3.l3
+                    label.active(for='fecha') Fecha
+                    |                     
+                    input#fecha.teal-text.text-darken-3.datepicker(name='fecha', type='text', )
+                  |                   
+                |                 
+                .row
+                  .col.s2.m2.l2
+                  .input-field.col.s6.m6.l6(style='text-align: center; margin-left: 15px;')
+                    textarea#descripcion.materialize-textarea.teal-text.text-darken-3(name='descripcion' data-length='350')
+                    |                     
+                    label(for='descripcion', class="active") Descripci&oacute;n
+                  |                   
+                |                   
+                .row
+                  .divider.blue.lighten-1.col.s12.m12.l12(style='text-align: center; width: 90%; margin-left: 5%;')
+                  .input-field.col.s12.m12.l12.center-align
+                    button#btAgregarAviso.btn.waves-effect.waves-light(type='submit', onclick="this.enabled=false; this.value='Validando...'; return validar_aviso();") Agregar Aviso
+                  |                             
+    br   
+    include ./includes/footer.jade
+    |     
+    // Import jQuery before materialize.js
+    script(type='text/javascript', src='materialize/js/materialize.min.js')
+    |     
+    script(type='text/javascript', src='js/script.js')

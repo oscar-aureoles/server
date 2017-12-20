@@ -1,0 +1,75 @@
+html
+  head
+    include ./includes/librerias.jade
+    |     
+    script(type='text/javascript', src='js/codigo.js')
+  |   
+  body
+    #contenedor.container
+      #logo.row
+        .col.s12.text-align.center
+          img.responsive-img(src='asset/ico/logo_seg.jpg', alt='Fondo no disponible')
+      |       
+      #login_row.row
+        .col.s12.m2.l2
+        |         
+        .col.s12.m12.l8
+          form(action='/recuperar_credenciales', method='post')
+            fieldset.card-panel.grey.darken-3
+              legend(style='text-align: center; padding-bottom: 20px')
+                | Informaci&oacute;n del Usuario
+              |               
+              #recuperar_info_contenido.row
+                .row
+                  .col.s10.m10.l10
+                  .col.s2.m2.l2
+                    button.btn-floating.transparent(type='button', onclick='mostratInfoPassOlvidada()')
+                      i.material-icons.prefix
+                        img(src='asset/ico/info.png', width='32', height='32')
+                  |                   
+                  .col.s1.m3.l3
+                  |                   
+                  .input-field.col.s10.m6.l6.card-panel.grey.darken-1
+                    i.material-icons.prefix
+                      img(src='asset/ico/user.png', width='32', height='32')
+                    |                     
+                    input#usuario.validate.grey-text.text-lighten-5(type='text', name='usuario')
+                    |                     
+                    label.active(for='usuario') Usuario
+                  |                   
+                |                 
+                .row
+                  .col.s1.m3.l3
+                  |                   
+                  .input-field.col.s10.m6.l6.card-panel.grey.darken-1
+                    i.material-icons.prefix
+                      img(src='asset/ico/curp.png', width='32', height='32')
+                    |                     
+                    input#curp.validate.grey-text.text-lighten-5(type='text', name='curp' data-length='18')
+                    |                     
+                    label.active(for='curp') Curp
+                  |                   
+                  .col.s12.m4.l2
+                |                 
+                .row
+                  .col.s12.m4.l2
+                  |                   
+                  .input-field.col.s12.m4.l8.center-align
+                    button#btLogin.btn.waves-effect.waves-light(type='submit', onclick="this.enabled=false; this.value='Validando...'; return validar_passOlvidado();") Recuperar Contrase&ntilde;a
+                  |                   
+                  .col.s12.m4.l2
+              |               
+              div
+                a(href='/login')
+                  h6.center-align Regresar
+        |         
+        .col.s12.m4.l2
+        if(guardado)
+           script(type='text/javascript') swal('Solicitud Enviada', 'Tus Credenciales has sido solicitadas, seran enviadas a tu correo electronico','success');
+        else if(error)
+           script(type='text/javascript') swal('Error:', 'No se ha podido solicitar tus credenciales intentalo de nuevo','error');
+    br   
+    include ./includes/footer.jade
+    |     
+    // Import jQuery before materialize.js
+    script(type='text/javascript', src='materialize/js/materialize.min.js')

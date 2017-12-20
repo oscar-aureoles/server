@@ -1,0 +1,83 @@
+html
+  head
+    include ./includes/librerias.jade
+    |     
+    link(rel='stylesheet', type='text/css', href='//cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.1.0/material.min.css')
+    |     
+    link(rel='stylesheet', type='text/css', href='https://cdn.datatables.net/1.10.16/css/dataTables.material.min.css')
+    |     
+    link(rel='stylesheet', type='text/css', href='https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css')
+    |     
+    script(type='text/javascript', src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js")
+    |          
+    script(type='text/javascript', src="https://cdn.datatables.net/1.10.16/js/dataTables.material.min.js")
+    |          
+    script(type='text/javascript').
+      $(document).ready(function(){
+        $('table.display').DataTable({
+          language: {
+                "zeroRecords": "Sin Concidencias",
+                "info": "Mostrado página _PAGE_ de _PAGES_, _START_ a _END_ de _TOTAL_ registros",
+                "infoEmpty": "No hay registros disponibles",
+                "infoFiltered": "(filtrado de los _MAX_ registros totales)",
+                "lengthMenu": "Mostrar _MENU_ registros por página",
+                "search": "Buscar:",
+                "paginate": {
+                  "first":      "Primero",
+                  "last":       "Ultimo",
+                  "next":       "Siguiente",
+                  "previous":   "Aterior"
+                },
+                'searchPlaceholder': "Buscar Registros"
+              }
+
+        });
+      });
+    |   
+    style.
+      *{
+      box-sizing: border-box;
+      }
+  |   
+  body
+    if(datos.esAutoridadEducativa === "es admin")
+        // AQUIE SE MOSTRARAN LAS OPCIONES DEL ADMIN
+        include ./includes/opciones_admin_menu.jade
+        |     
+        include ./includes/barra_menu_admin.jade
+        |     
+    else if(datos.esAutoridadEducativa == 'es tutor')
+        include ./includes/barra_menu_tutor.jade
+        |     
+    else if(datos.esAutoridadEducativa == 'es tutorado')
+        include ./includes/barra_menu_tutorado.jade
+        |     
+    // Contenido de la PAGINA
+    #contenedor.container(style='padding-right: 5px;')
+      #tabla_avisos.row(style='border-style: solid; border-radius: 8px; padding-right: 5px; margin-top: 1%;')
+        // Tabla        
+        .col.s11(style='text-align: center; overflow:scroll; height: 69%; width: 100%; ')
+          table#contenido_tabla.display(width="100%")
+            thead#head_tabla
+              tr
+                th(style='width: 30%;') Nombre Aviso
+                |                   
+                th(style='width: 50%;') Descripción Aviso
+                |                   
+                th(style='width: 20%;') Fecha
+            |             
+            tbody#body_tabla
+              each item in listaAvisos
+                tr(id= item.id)        
+                  td #{item.nombre_aviso}
+                  |                 
+                  td #{item.descripcion}
+                  |                 
+                  td #{item.fecha}
+    br   
+    include ./includes/footer.jade
+    |     
+    // Import jQuery before materialize.js
+    script(type='text/javascript', src='materialize/js/materialize.min.js')
+    |     
+    script(type='text/javascript', src='js/script.js')

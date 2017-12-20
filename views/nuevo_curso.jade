@@ -1,0 +1,77 @@
+html
+  head
+    include ./includes/librerias.jade
+    |     
+    script(type='text/javascript', src='js/codigo_nuevo_curso.js')
+  |   
+  body
+    // AQUIE SE MOSTRARAN LAS OPCIONES DEL ADMIN
+    include ./includes/opciones_admin_menu.jade
+    |     
+    include ./includes/barra_menu_admin.jade
+    |     
+    // Contenido de la PAGINA
+    #contenedor.container
+      #info_curso.row
+        .col.s12.m4.l2
+        |         
+        .col.s12.m12.l12
+          form(action='/nuevo_curso', method='post' id='datos')
+            fieldset
+              legend.red-text.text-darken-4(style='text-align: center') Datos del Curso
+              |               
+              #curso_contenido.row
+                .row
+                  .input-field.col.s6.m6.l6(style='text-align: center; margin-left: 15px;')
+                    input#nombre.validate.teal-text.text-darken-3(type='text', name='nombre')
+                    |                     
+                    label.active(for='nombre') Nombre del Curso
+                  |                   
+                  .input-field.col.s5.m5.l5
+                    input#sesiones.validate.teal-text.text-darken-3(type='number', min='1', max='10', name='sesiones' value='4')
+                    |                     
+                    label.active(for='sesiones') N&uacute;mero de Sesiones
+                |                 
+                .row
+                  .input-field.col.s6.m6.l6(style='text-align: center; margin-left: 15px;')
+                    textarea#descripcion.materialize-textarea(name='descripcion')
+                    |                     
+                    label(for='descripcion') Descripci&oacute;n
+                  |                   
+                  .col.s5.m5.l5
+                    label(for='fecha_inicio') Fecha Inicio
+                    |                     
+                    input#fecha_inicio.datepicker(name='fecha_inicio', type='text')
+                  |                   
+                  .col.s5.m5.l5
+                    label(for='fecha_fin') Fecha Fin
+                    |                     
+                    input#fecha_fin.datepicker(name='fecha_fin', type='text')
+                // Searador
+                .divider.red.lighten-1(style='')
+                |                 
+                br
+                .row
+                  .input-field.col.s3.m3.l3
+                  |                 
+                  .input-field.col.s3.m3.l3
+                  |                 
+                  .input-field.col.s3.m3.l3(style='text-align: center;')
+                    button.waves-effect.waves-light.btn.grey.lighten-2.black-text(type='button', onclick='cancelar_registro();') Cancelar
+                  |                      
+                  .input-field.col.s3.m3.l3(style='text-align: center;')
+                    button#btRegistrarCurso.btn.waves-effect.waves-light(type='submit', onclick="this.enabled=false; this.value='Validando...'; return validar_curso();") Registrar Curso
+                  |          
+        |         
+        .col.s12.m4.l2        
+        if(error)
+            script(type='text/javascript') swal('Error:', 'El curso no pudo ser registrado','error');
+        if(guardado)
+            script(type='text/javascript') swal('Guardado:', 'Curso Registrado Correctamente','success');
+    br   
+    include ./includes/footer.jade
+    |     
+    // Import jQuery before materialize.js
+    script(type='text/javascript', src='materialize/js/materialize.min.js')
+    |     
+    script(type='text/javascript', src='js/script.js')

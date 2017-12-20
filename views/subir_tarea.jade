@@ -1,0 +1,73 @@
+html
+  head
+    include ./includes/librerias.jade
+    |     
+    script(type='text/javascript', src='js/subir_tarea.js')
+    |     
+  |   
+  body
+    include ./includes/barra_menu_tutorado.jade
+    |     
+    // Contenido de la PAGINA
+    #contenedor.container(style='padding-right: 5px;')
+      form(action='/subir_tarea', method='post' enctype='multipart/form-data')
+        fieldsetstyle(style='border-style: none;')
+          .row(style='border-style: solid; border-radius: 8px; padding-right: 5px; margin-top: 1%;')
+            .col.s4.m4.l4.center
+              input#FIActividad.blue-text.darken-3(type='text', name='FIActividad', value='Fecha Inicio: #{new Date(datos.datosTarea.fecha_inicio).toDateString()}' readonly style='border:none; text-align:center;')
+            .col.s4.m4.l4.center
+              input#nombreActividad.red-text.darken-3(type='text', name='nombreActividad', value='#{datos.datosTarea.nombre_titulo}' readonly style='border:none; text-align:center;')
+            .col.s4.m4.l4.center
+              input#FFActividad.blue-text.darken-3(type='text', name='FFActividad', value='Fecha Limite: #{new Date(datos.datosTarea.fecha_fin).toDateString()}' readonly style='border:none; text-align:center;')
+            center
+              .divider.red.lighten-1(style='border-style: dotted; border-width: 1px; width: 95%;')
+            br
+            .row
+              if(datos.datosTarea.status_actividad == 0)
+                .col.s5.m5.l5
+                  input#statusActividad.indigo-text.darken-4(type='text', name='statusActividad', value='Status de la Tarea: ' readonly style='border:none; text-align:center;')
+                .col.s3.m3.l3
+                  input#statusActividad.blue-grey-text.darken-4(type='text', name='statusActividad', value='Sin cargar archivo' readonly style='border:none; text-align:center;')
+                .row
+                .col.m3.l3
+                .col.s12.m6.l6
+                  .file-field.input-field
+                    .btn
+                      span Archivo
+                      |                
+                      input#archivo(type='file', name='archivo' onchange='document.getElementById(\'btSubirArchivo\').disabled=false;')
+                    |                       
+                    .file-path-wrapper
+                      input#archivoS.file-path.validate(type='text')
+                |                   
+                .row
+                .col.s6.m6.l6
+                .col.s3.m3.l3
+                  button.waves-effect.waves-light.btn.grey.lighten-2.black-text(type='button', onclick='cancelar_regresar(#{datos.datosTarea.id_curso});') Cancelar
+                .col.s3.m3.l3
+                  button.waves-effect.waves-light.btn.green.lighten-2.black-text(id='btSubirArchivo' type='submit', onclick='return subirTarea();' disabled) Subir Tarea
+
+              else if(datos.datosTarea.status_actividad == 1)
+                .col.s5.m5.l5
+                  input#statusActividad.indigo-text.darken-4(type='text', name='statusActividad', value='Status de la Tarea: ' readonly style='border:none; text-align:center;')
+                .col.s3.m3.l3
+                  input#statusActividad.green-text.darken-4(type='text', name='statusActividad', value='Tarea Cargada' readonly style='border:none; text-align:center;')
+                .col.s3.m3.l3
+                  input#fechastatusActividad.blue-grey-text.darken-4(type='text', name='fechastatusActividad', value='#{new Date(datos.datosTarea.fecha_realizacion)}' readonly style='border:none; text-align:center;')
+                .row
+                .col.s6.m9.l9
+                .col.s3.m3.l3
+                  button.waves-effect.waves-light.btn.grey.lighten-2.black-text(type='button', onclick='cancelar_regresar(#{datos.datosTarea.id_curso});') Regresar
+    if(datos.mensaje == 'formatoInvalido')
+      script(type='text/javascript') swal('Error:', 'El formato del archivo no es válido, intente con otro archivo','error');
+    else if(datos.mensaje == 'archivoExiste')
+      script(type='text/javascript') swal('Error:', 'El nombre del archivo no es válido, cámbielo he inténtelo de nuevo','error');
+    else if(datos.mensaje == 'success')
+      script(type='text/javascript') swal('Exito:', 'Tarea Subida Correctamente','success');
+    br   
+    include ./includes/footer.jade
+    |     
+    // Import jQuery before materialize.js
+    script(type='text/javascript', src='materialize/js/materialize.min.js')
+    |     
+    script(type='text/javascript', src='js/script.js')

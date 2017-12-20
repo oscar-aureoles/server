@@ -1,0 +1,138 @@
+html
+  head
+    include ./includes/librerias.jade
+    |     
+    title CURSO: #{nombre_curso}
+    |     
+    script(src='https://unpkg.com/sweetalert/dist/sweetalert.min.js')
+    |     
+    script(type='text/javascript', src='http://192.168.43.219:8085/js/contenido_curso.js')
+    |     
+    script(src='http://192.168.43.219:8085/tinymce/tinymce.min.js')
+    |     
+    script(type='text/javascript').
+      tinymce.init({ 
+        selector:'textarea',
+        plugins: ["advlist","link","media","image","table","preview","textcolor","lists"],
+        toolbar: ["undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | numlist bullist | outdent indent | link image media | forecolor backcolor | preview"]
+      });
+    |     
+    style.
+      .shaw:hover{
+      box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+      border: 2px solid #4CAF50;
+      }
+      .shaw{
+      background-color: transparent;
+      border-color: transparent;
+      }
+  |   
+  body
+    // AQUIE SE MOSTRARAN LAS OPCIONES DEL ADMIN
+    include ./includes/opciones_admin_menu.jade
+    |     
+    include ./includes/barra_menu_admin.jade
+    |     
+    // Contenido de la PAGINA
+    #contenedor.container
+      // Contenido de las Sesiones
+      #info_sesiones.row
+        ul.collapsible(data-collapsible="expandable")
+          each item in sesiones
+            li
+              //titulo de las sesiones, se muestra fecha_inicio, numero_sesion y fecha_fin
+              .collapsible-header 
+                  .col.s4.m4.l4
+                    input.blue-text.text-darken-3(style='text-align: left; border:none;' value="Fecha Inicio: " + new Date('#{item.fecha_inicio}').toDateString()+'' readonly)
+                  |     
+                  .col.s4.m4.l4(style='text-align: center;')
+                    h5.brown-text.text-darken-2 #{item.numero_sesion}
+                  |     
+                  .col.s4.m4.l4
+                    input.blue-text.text-darken-3(style='text-align: right; border:none;' value="Fecha Fin: " + new Date('#{item.fecha_fin}').toDateString() +'' readonly )
+                  |     
+              //contenido donde se muestras las actividades de cada sesion
+              .collapsible-body
+                .row(id='sesion#{item.id_sesion}' style='text-align: center; border: none; border-width: 2px;')
+                  .col.s8.m8.l8
+                  .input-field.col.s4.m4.l4
+                    a.modal-trigger(href="#modal#{item.id_sesion}" style='background-color:none; border:solid; border-color: 26a69a; border-radius: 9px; padding: 5px 5px 5px 5px;') Agregar Actividad
+                  |          
+                  br
+                  br
+                  //actividades
+                  ul.collapsible.popout(data-collapsible="accordion")
+                    each item2 in item.listaActividadesSesion
+                      li
+                        .collapsible-header
+                          h6.red-text.text-darken-2 #{item2.nombre_titulo}
+                          if(item2.tipo_actividad === 'Tarea')
+                            .col.s10.m10.l10
+                              .col.s5.m5.l5
+                                input.blue-text.text-darken-4(style='text-align: right; border:none;' value="Fecha Inicio: " + new Date('#{item2.fecha_inicio}').toDateString() +'' readonly )
+                              .col.s5.m5.l5
+                                input.blue-text.text-darken-4(style='text-align: right; border:none;' value="Fecha Limite: " + new Date('#{item2.fecha_fin}').toDateString() +'' readonly )
+                          a.grey-text.text-darken-2(onclick="eliminar_actividad('#{item2.id_actividad}', '#{item.id_curso}')" style='margin :0 0 0 auto') X
+                        .collapsible-body
+                          .row
+                            .text-align.center(id='aaa#{item2.id_actividad}')
+                              br
+                              br
+                            .col.s8.m8.l8(style='text-align: center;s' )
+                              input(value='#{item2.descripcion_contenido}' id='html#{item2.id_actividad}' hidden)
+                              script(type='text/javascript') agregar_actividad_valores('#{item2.id_actividad}');
+                      
+                  //modal(alert) donde se muestra las opciones para agregar una actividad
+                  .modal(id='modal#{item.id_sesion}' width='100%')
+                    .modal-content
+                      .row(style='text-align: center; border:solid;')
+                        u.red-text.text-darken-4
+                          h5.red-text.text-darken-2 Agregar Actividad
+                        br
+                        form(action='/nueva_actividad', method='post' id='datos')
+                          .row
+                            .col.s2.m2-l2
+                              input(style='text-align: center; ' value="#{item.id_sesion}" name='id_sesion' id='id_sesion' readonly hidden)
+                            .col.s3.m3.l3(style='text-align: center; margin-top: 15px; margin-left: 15px;')
+                              select(onchange='mostrar_tipo_actividad(\'#{item.id_sesion}\')' name='tipo_actividad' id='tipo_actividad#{item.id_sesion}' style='text-align: center;')
+                                option(value='0', disabled='', selected='') Tipo Actividad
+                                |                       
+                                each item2 in tipo_actividades
+                                  option(value='#{item2.id_tipo_actividad}') #{item2.nombre_tipo_actividad}
+                            .col.s1.m1.l1
+                              i.material-icons.prefix(onclick='mostratInfoActividad(\'#{item.id_sesion}\')')
+                                img(src='http://192.168.43.219:8085/asset/ico/info.png', width='50%', height='auto')
+                            .col.s4.m4.l4
+                              .input-field(style='text-align: center; margin-left: 15px;')
+                                input#titulo_actividad.validate.teal-text.text-darken-3(type='text', name='titulo_actividad' data-length='45' style='text-align: center;')
+                                |                     
+                                label.active(for='nombre') Titulo de la Actividad
+                            |                   
+                          .row(style='text-align: center; margin-left: 15px;' id='fechas#{item.id_sesion}' )
+                            .col.s2.m2-l2
+                            .col.s4.m4.l4
+                              label(for='fecha_inicio') Fecha Inicio
+                              |                     
+                              input#fecha_inicio.datepicker(name='fecha_inicio', type='text' style='text-align: center;')
+                            .col.s4.m4.l4
+                              label(for='fecha_fin') Fecha Limite
+                              |                     
+                              input#fecha_fin.datepicker(name='fecha_fin', type='text' style='text-align: center;')
+                          .row
+                            .col.s11.m11.l11(style='text-align: center; margin-left: 40px;' id='textarea#{item.id_sesion}')
+                              textarea(name='areaContenido' id='areaContenido#{item.id_sesion}' style='text-align: center;')
+                                |Ingresa el contenido/descrpción...
+                              br
+                              button.btn.waves-effect.waves-light(type='submit', onclick="this.enabled=false; this.value='Validando...';" id='btRegistrarRecurso#{item.id_sesion}') Registrar Actividad
+                              br
+                              br
+        
+          if(selec_grupo)
+            script(type='text/javascript') swal('#{cursoSelec.titulo}', '#{cursoSelec.listaTutoradosGrupo}','info');
+    br   
+    include ./includes/footer.jade
+    |     
+    // Import jQuery before materialize.js
+    script(type='text/javascript', src='http://192.168.43.219:8085/materialize/js/materialize.min.js')
+    |     
+    script(type='text/javascript', src='http://192.168.43.219:8085/js/script.js')

@@ -1,0 +1,109 @@
+html
+  head
+    include ./includes/librerias.jade
+    |     
+    script(src='https://unpkg.com/sweetalert/dist/sweetalert.min.js')
+    |     
+    script(type='text/javascript', src='http://10.0.0.4:8085/js/mi_curso.js')
+    |     
+  |   
+  body
+    if(datos.esAutoridadEducativa == 'es tutor')
+      include ./includes/barra_menu_tutor.jade
+      |     
+    else if(datos.esAutoridadEducativa == 'es tutorado')
+      include ./includes/barra_menu_tutorado.jade
+      |     
+    // Contenido de la PAGINA
+    #contenedor.container
+      // Contenido de las Sesiones
+      #info_sesiones.row
+        ul.collapsible(data-collapsible="expandable" )
+          each item in sesiones
+            li
+              //titulo de las sesiones, se muestra fecha_inicio, numero_sesion y fecha_fin
+              if(item.id_sesion == datos.id_sesionSel)
+                .collapsible-header.active
+                  .col.s4.m4.l4
+                    input.blue-text.text-darken-3(style='text-align: left; border:none;' value="Fecha Inicio: " + new Date('#{item.fecha_inicio}').toDateString()+'' readonly)
+                  |     
+                  .col.s4.m4.l4(style='text-align: center;')
+                    h5.brown-text.text-darken-2 #{item.numero_sesion}
+                  |     
+                  .col.s4.m4.l4
+                    input.blue-text.text-darken-3(style='text-align: right; border:none;' value="Fecha Fin: " + new Date('#{item.fecha_fin}').toDateString() +'' readonly )
+                  |     
+              else
+                .collapsible-header
+                  .col.s4.m4.l4
+                    input.blue-text.text-darken-3(style='text-align: left; border:none;' value="Fecha Inicio: " + new Date('#{item.fecha_inicio}').toDateString()+'' readonly)
+                  |     
+                  .col.s4.m4.l4(style='text-align: center;')
+                    h5.brown-text.text-darken-2 #{item.numero_sesion}
+                  |     
+                  .col.s4.m4.l4
+                    input.blue-text.text-darken-3(style='text-align: right; border:none;' value="Fecha Fin: " + new Date('#{item.fecha_fin}').toDateString() +'' readonly )
+                  |     
+              //contenido donde se muestras las actividades de cada sesion
+              .collapsible-body
+                .row(id='sesion#{item.id_sesion}' style='text-align: center; border: none; border-width: 2px;display: block;')
+                  //actividades
+                  ul.collapsible.popout(data-collapsible="accordion" )
+                    each item2 in item.listaActividadesSesion
+                      li
+                        if(item2.tipo_actividad === 'Contenido' & item2.status_actividad === 0) 
+                          .collapsible-header(onclick="actividadRealizada(#{item2.id_actividad}, #{item.id_sesion})")
+                            h6.red-text.text-darken-2 #{item2.nombre_titulo}
+                            if(item2.tipo_actividad === 'Tarea')
+                              .col.s10.m10.l10
+                                .col.s5.m5.l5
+                                  input.blue-text.text-darken-4(style='text-align: right; border:none;' value="Fecha Inicio: " + new Date('#{item2.fecha_inicio}').toDateString() +'' readonly )
+                                .col.s5.m5.l5
+                                  input.blue-text.text-darken-4(style='text-align: right; border:none;' value="Fecha Limite: " + new Date('#{item2.fecha_fin}').toDateString() +'' readonly )
+                        else if(item2.tipo_actividad === 'Tarea' | item2.status_actividad === 1) 
+                          if(item2.id_actividad == datos.id_actividadSel)
+                            .collapsible-header.active
+                              h6.red-text.text-darken-2 #{item2.nombre_titulo}
+                              if(item2.tipo_actividad === 'Tarea')
+                                .col.s10.m10.l10
+                                  .col.s5.m5.l5
+                                    input.blue-text.text-darken-4(style='text-align: right; border:none;' value="Fecha Inicio: " + new Date('#{item2.fecha_inicio}').toDateString() +'' readonly )
+                                  .col.s5.m5.l5
+                                    input.blue-text.text-darken-4(style='text-align: right; border:none;' value="Fecha Limite: " + new Date('#{item2.fecha_fin}').toDateString() +'' readonly )
+                          else
+                            .collapsible-header
+                              h6.red-text.text-darken-2 #{item2.nombre_titulo}
+                              if(item2.tipo_actividad === 'Tarea')
+                                .col.s10.m10.l10
+                                  .col.s5.m5.l5
+                                    input.blue-text.text-darken-4(style='text-align: right; border:none;' value="Fecha Inicio: " + new Date('#{item2.fecha_inicio}').toDateString() +'' readonly )
+                                  .col.s5.m5.l5
+                                    input.blue-text.text-darken-4(style='text-align: right; border:none;' value="Fecha Limite: " + new Date('#{item2.fecha_fin}').toDateString() +'' readonly )
+
+                        .collapsible-body
+                          .row
+                            .text-align.center(id='aaa#{item2.id_actividad}')
+                              br
+                              br
+                            .col.s8.m8.l8(style='text-align: center;' )
+                              input(value='#{item2.descripcion_contenido}' id='html#{item2.id_actividad}' hidden)
+                              script(type='text/javascript') agregar_actividad_valores('#{item2.id_actividad}');
+                            if(item2.tipo_actividad === 'Tarea')
+                              if(datos.esAutoridadEducativa === 'es tutor')
+                                .col.s3.m3.l3(style='text-align: center;')
+                                  i
+                                  button#btAccionTarea.waves-effect.waves-light.btn.grey.lighten-2.black-text(type='button', onclick='verTarea(\'#{item2.id_actividad}\')') Ver Tareas
+                              else if(datos.esAutoridadEducativa === 'es tutorado')
+                                .col.s3.m3.l3(style='text-align: center;')
+                                  i
+                                  button.waves-effect.waves-light.btn.grey.lighten-2.black-text(type='button', onclick="subirTarea('#{item2.id_actividad}')" id='btnSubirTarea#{item2.id_actividad}') Subir Tarea
+                                script(type='text/javascript') btn_subir_tarea('#{item2.id_actividad}', '#{item2.fecha_fin}');
+            |     
+            script(type='text/javascript') sesion_activa('#{item.id_sesion}', '#{item.fecha_inicio}');
+    br   
+    include ./includes/footer.jade
+    |     
+    // Import jQuery before materialize.js
+    script(type='text/javascript', src='http://10.0.0.4:8085/materialize/js/materialize.min.js')
+    |     
+    script(type='text/javascript', src='http://10.0.0.4:8085/js/script.js')

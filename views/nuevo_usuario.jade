@@ -1,0 +1,222 @@
+html
+  head
+    include ./includes/librerias.jade
+    |     
+    script(type='text/javascript', src='js/codigo_nuevo_usuario.js')
+  |   
+  body
+    // AQUIE SE MOSTRARAN LAS OPCIONES DEL ADMIN
+    include ./includes/opciones_admin_menu.jade
+    |     
+    include ./includes/barra_menu_admin.jade
+    |     
+    // Contenido de la PAGINA
+    #contenedor.container
+      #info_usuario.row
+        .col.s12.m4.l2
+        |         
+        .col.s12.m12.l12
+          form(action='/nuevo_usuario', method='post' enctype='multipart/form-data')
+            fieldset
+              legend.red-text.text-darken-4(style='text-align: center') Datos del Usuario
+              |               
+              #usuario_contenido.row
+                .row
+                  .input-field.col.s5.m5.l5(style='text-align: center; margin-left: 15px;')
+                    input#curp.validate.teal-text.text-darken-3(type='text', name='curp', data-length='18' style='text-transform:uppercase;')
+                    |                     
+                    label.active(for='curp') Curp
+                  |                   
+                  .input-field.col.s6.m6.l6(style='text-align: center; margin-left: 15px;')
+                    input#nombre.validate.teal-text.text-darken-3(type='text', name='nombre' style='text-transform:uppercase;')
+                    |                     
+                    label.active(for='nombre') Nombre
+                |                 
+                .row
+                  .input-field.col.s5.m5.l5(style='text-align: center; margin-left: 15px;')
+                    input#apellido_paterno.validate.teal-text.text-darken-3(type='text', name='apellido_paterno' style='text-transform:uppercase;')
+                    |                     
+                    label.active(for='apellido_paterno') Apellido Paterno
+                  |                   
+                  .input-field.col.s6.m6.l6(style='text-align: center; margin-left: 15px;')
+                    input#apellido_materno.validate.teal-text.text-darken-3(type='text', name='apellido_materno' style='text-transform:uppercase;')
+                    |                     
+                    label.active(for='apellido_materno') Apellido Materno
+                |                 
+                .row
+                  .input-field.col.s4.m4.l4
+                  |                   
+                  .input-field.col.s4.m4.l4(style='text-align: center;')
+                    select#tipo_usuario(onchange='opciones_tipoUsuario();' name='tipo_usuario')
+                      option(value='0', disabled='', selected='') Tipo Usuario
+                      |                       
+                      each item in list.tipo_usuario
+                        option(value='#{item.id}') #{item.nombreTipoUsuario}
+                  |                   
+                  .input-field.col.s4.m4.l4
+                // Searador
+                center
+                  .divider.red.lighten-1(style='border-style: dotted; border-width: 1px; width: 95%;')
+                |                 
+                br
+                |                 
+                .row
+                  .input-field.col.s5.m5.l5(style='text-align: center; margin-left: 15px;')
+                    input#email.validate.teal-text.text-darken-3(type='text', name='email')
+                    |                     
+                    label.active(for='email') Email
+                  |                   
+                  .input-field.col.s6.m6.l6(style='text-align: center; margin-left: 15px;')
+                    input#cct.validate.teal-text.text-darken-3(type='text', name='cct' style='text-transform:uppercase;')
+                    |                     
+                    label.active(for='cct') CCT
+                |                 
+                .row
+                  .col.s5.m5.l5(style='text-align: center; margin-left: 15px;')
+                    .file-field.input-field
+                      .btn
+                        span FOTO
+                        |                         
+                        input#foto(type='file', name='foto', onchange='showimagepreview(this)')
+                      |                       
+                      .file-path-wrapper
+                        input.file-path.validate(type='text')
+                  |                   
+                  .col.s3.m3.l3(style='text-align: center; margin-top: 15px;')
+                    select#entidad(name='entidad')
+                      option(value='0', disabled='', selected='') Entidad
+                      |                       
+                      each item in list.entidades
+                        option(value='#{item.id}') #{item.nombreEntidad}
+                  |                   
+                  .col.s3.m3.l3(style='text-align: center; margin-top: 15px;')
+                    select#categoria(name='categoria')
+                      option(value='0', disabled='', selected='') Categor&iacute;a
+                      |                       
+                      each item in list.categorias
+                        option(value='#{item.id}') #{item.nombreCategoria}
+                |                 
+                .row
+                  .col.s5.m5.l5(style='text-align: center; margin-left: 15px;')
+                    | Foto de Perfil:
+                    img#foto_cargada(alt='', width='200', height='200', style='margin-left: 5px;')
+                  |                   
+                  .col.s3.m3.l3(style='text-align: center; margin-top: 15px;')
+                    select#funcion(name='funcion')
+                      option(value='0', disabled='', selected='') Funci&oacute;n
+                      |                       
+                      each item in list.funciones
+                        option(value='#{item.id}') #{item.nombreFuncion}
+                  |                   
+                  .col.s3.m3.l3(style='text-align: center; margin-top: 15px;')
+                    select#nivel_educativo(name='nivel_educativo')
+                      option(value='0', disabled='', selected='') Nivel Educativo
+                      |                       
+                      each item in list.nivel_edu
+                        option(value='#{item.id}') #{item.nombreNivel}
+                  |                   
+                  .col.s3.m3.l3(style='text-align: center; margin-top: 15px;')
+                    select#bloque(name='bloque')
+                      option(value='0', disabled='', selected='') Bloque
+                      |                       
+                      each item in list.bloques
+                        option(value='#{item.id}') #{item.nombreBloque}
+                  |                   
+                  .col.s3.m3.l3(style='text-align: center; margin-top: 15px;')
+                    select#tipo_sostenimiento(name='tipo_sostenimiento')
+                      option(value='0', disabled='', selected='') Tipo Sostenimiento
+                      |                       
+                      each item in list.tipo_sostenimiento
+                        option(value='#{item.id}') #{item.nombreTipoSostenimiento}
+                  |                   
+                  .col.s3.m3.l3(style='text-align: center; margin-top: 15px;')
+                    select#tipo_examen(name='tipo_examen')
+                      option(value='0', disabled='', selected='') Tipo Examen
+                      |                       
+                      each item in list.tipo_examen
+                        option(value='#{item.id}') #{item.nombreTipoExamen}
+                  |                   
+                  .input-field.col.s3.m3.l3(style='text-align: center; margin-top: 15px;')
+                    input#convocatoria_seleccionada.validate.teal-text.text-darken-3(type='number', min='2000', name='convocatoria_seleccionada', style='text-align: right;')
+                    |                     
+                    label.active(for='convocatoria_seleccionada') Convocatoria Seleccionada
+                    |                     
+                    script(type='text/javascript').
+                      document.getElementById('convocatoria_seleccionada').value = new Date().getFullYear();
+                |                 
+                .row
+                  .col.s3.m3.l3
+                  |                   
+                  .col.s3.m3.l3(style='text-align: center; margin-left: 15px; margin-top: 15px;')
+                    select#status_asignacion(name='status_asignacion' onchange='cambiar_fecha();')
+                      option(value='-1', disabled='', selected='') Status Asignaci&oacute;n
+                      |                       
+                      option(value='0') Sin Asignar
+                      |                       
+                      option(value='1') Asignado
+                  |                   
+                  .input-field.col.s4.m4.l4
+                    input#fecha_asignacion.text.teal-text.text-darken-3(name='fecha_asignacion', type='text' readonly)
+                    |                     
+                    label.active(for='fecha_asignacion') Fecha Asignaci&oacute;n
+                    |                     
+              // Searador
+              center
+                .divider.red.lighten-1(style='border-style: dotted; border-width: 1px; width: 95%;')
+              |               
+              br
+              |               
+              .row
+                .input-field.col.s6.m6.l6(style='text-align: center; margin-left: 15px;')
+                  input#nombre_usuario.validate.teal-text.text-darken-3(type='text', name='nombre_usuario')
+                  |                   
+                  label.active(for='nombre_usuario') Usuario
+                |                 
+                .input-field.col.s5.m5.l5(style='text-align: center; margin-left: 15px;')
+                  input#contrasena.validate.teal-text.text-darken-3(type='text', name='contrasena')
+                  |                   
+                  label.active(for='contrasena') Contrase&ntilde;a
+              |               
+              .row
+                .input-field.col.s4.m4.l4
+                |                 
+                .input-field.col.s4.m4.l4(style='text-align: center; margin-left: 15px;')
+                  select#status_cuenta(name='status_cuenta')
+                    option(value='-1', disabled='', selected='') Status Cuenta
+                    |                     
+                    option(value='0') Desactivada
+                    |                     
+                    option(value='1') Activa
+                |                 
+                .input-field.col.s4.m4.l4
+              // Searador
+              br
+              |               
+              center
+                .divider.red.lighten-1(style='border-style: dotted; border-width: 1px; width: 95%;')
+              |               
+              br
+              |               
+              .row
+                .input-field.col.s3.m3.l3
+                |                 
+                .input-field.col.s3.m3.l3
+                |                 
+                .input-field.col.s3.m3.l3(style='text-align: center;')
+                  button.waves-effect.waves-light.btn.grey.lighten-2.black-text(type='button', onclick='cancelar_registro();') Cancelar
+                |                 
+                .input-field.col.s3.m3.l3(style='text-align: center;')
+                  button.btn.waves-effect.waves-green.lighten-2.black-text(type='submit', onclick="this.enabled=false; this.value='Validando...'; return validar_usuario();" id='btRegistrarUsuario') Registrar Usuario
+        |         
+        .col.s12.m4.l2
+        if(error)
+            script(type='text/javascript') swal('Error:', 'El usuario no pudo ser registrado','error');
+        else if(guardado)
+            script(type='text/javascript') swal('Guardado:', 'Usuario Registrado Correctamente','success');
+    br   
+    include ./includes/footer.jade
+    |     
+    // Import jQuery before materialize.js
+    script(type='text/javascript', src='materialize/js/materialize.min.js')
+    |     
+    script(type='text/javascript', src='js/script.js')

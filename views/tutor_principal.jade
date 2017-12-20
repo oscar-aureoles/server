@@ -1,0 +1,96 @@
+html
+  head
+    meta(charset='UTF-8')
+    |     
+    link(rel='shortcut icon' type='image/x-icon' href='asset/ico/favicon.ico')
+    |     
+    title #{titulo}
+    |     
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    |     
+    link(rel='stylesheet', href='materialize/css/materialize.min.css')
+    |     
+    script(type='text/javascript', src='js/jquery-3.2.1.min.js')
+    |     
+    link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
+    |     
+    script(src='js/sweetAlert.js')
+  |   
+  body
+    include ./includes/barra_menu_tutor.jade
+    |     
+    #contenedor.container
+      .row(style='text-align: center; overflow:scroll; height: 70%;')
+        .col.s12
+          ul#tabs-swipe-demo.tabs
+            li.tab.col.s3
+              a.active(href='#test-swipe-1') Cursos Actuales
+            |             
+            li.tab.col.s3
+              a(href='#test-swipe-2') Cursos Pasados
+          // Tab Cursos Actuales
+          #test-swipe-1.col.s12.blue
+            .row
+              each item in CursosActuales
+                .col.s6.m6.l6
+                  .card
+                    .card-content
+                      span.card-title.activator.grey-text.text-darken-4
+                        | Curso: #{item.nombre}
+                        i.material-icons.right more_vert
+                    |                   
+                    .card-reveal
+                      span.card-title.grey-text.text-darken-4
+                        | Curso: #{item.nombre}
+                        i.material-icons.right close
+                      |                     
+                      p
+                        | Descripción del curso......
+                      p
+                        | #{item.descripcion}
+                    |                   
+                    .card-action
+                      a(href='mi_curso/#{item.id}') Ir al Curso
+                |               
+              if(CursosActuales.length === 0)
+                h4(style='text-align: center; color: white;') SIN CURSOS ACTUALES
+          // Tab Cursos Pasados
+          #test-swipe-2.col.s12.red
+            .row
+              each item in CursosPasados
+                .col.s6.m6.l6
+                  .card
+                    .card-content
+                      span.card-title.activator.grey-text.text-darken-4
+                        | Curso: #{item.nombre}
+                        i.material-icons.right more_vert
+                    |                   
+                    .card-reveal
+                      span.card-title.grey-text.text-darken-4
+                        | Curso: #{item.nombre}
+                        i.material-icons.right close
+                      |                     
+                      p
+                        | Descripción del curso......
+                      p
+                        | #{item.descripcion}
+                    |                   
+                    .card-action
+                      a(href='#') Ir al Curso
+                |               
+              if(CursosPasados.length === 0)
+                h4(style='text-align: center; color: white;') SIN CURSOS PASADOS
+    br
+    if(datos.avisoActual)
+      script(type='text/javascript').
+        var texto ="#{datos.texto}";
+        texto = texto.split('&lt;br/&gt;').join('<br/>');
+        texto = texto.split('&lt;b&gt;').join('<b>');
+        texto = texto.split('&lt;/b&gt;').join('</b>');
+        swal({title: "#{datos.titulo}", html: texto, type: 'info'});
+    include ./includes/footer.jade
+    |     
+    // Import jQuery before materialize.js
+    script(type='text/javascript', src='materialize/js/materialize.min.js')
+    |     
+    script(type='text/javascript', src='js/script.js')

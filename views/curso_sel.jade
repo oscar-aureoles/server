@@ -1,0 +1,296 @@
+html
+  head
+    include ./includes/librerias.jade
+    |     
+    script(type='text/javascript', src='js/codigo_curso_sel.js')
+    |     
+    link(rel='stylesheet', type='text/css', href='//cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.1.0/material.min.css')
+    |     
+    link(rel='stylesheet', type='text/css', href='https://cdn.datatables.net/1.10.16/css/dataTables.material.min.css')
+    |     
+    link(rel='stylesheet', type='text/css', href='https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css')
+    |     
+    script(type='text/javascript', src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js")
+    |          
+    script(type='text/javascript', src="https://cdn.datatables.net/1.10.16/js/dataTables.material.min.js")
+    |          
+    script(type='text/javascript').
+      $(document).ready(function(){
+        $('table.display').DataTable({
+          language: {
+                "zeroRecords": "Sin Concidencias",
+                "info": "Mostrado página _PAGE_ de _PAGES_, _START_ a _END_ de _TOTAL_ registros",
+                "infoEmpty": "No hay registros disponibles",
+                "infoFiltered": "(filtrado de los _MAX_ registros totales)",
+                "lengthMenu": "Mostrar _MENU_ registros por página",
+                "search": "Buscar:",
+                "paginate": {
+                  "first":      "Primero",
+                  "last":       "Ultimo",
+                  "next":       "Siguiente",
+                  "previous":   "Aterior"
+                },
+                'searchPlaceholder': "Buscar Registros"
+              }
+
+        });
+      });
+    |   
+    style.
+      .shaw:hover{
+      box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+      border: 2px solid #4CAF50;
+      }
+      .shaw{
+      background-color: transparent;
+      border-color: transparent;
+      }
+      .tabs .indicator { background-color: #00695c; }
+  |   
+  body
+    // AQUIE SE MOSTRARAN LAS OPCIONES DEL ADMIN
+    include ./includes/opciones_admin_menu.jade
+    |     
+    include ./includes/barra_menu_admin.jade
+    |     
+    // Contenido de la PAGINA
+    #contenedor.container
+      .row.col.s12
+        ul#tabs-swipe-demo.tabs
+          li.tab.col.s3.m3.l3
+            a.active.blue-text.text-darken-1(href='#info_curso') Datos del Curso
+          |             
+          li.tab.col.s3.m3.l3
+            a.blue-text.text-darken-1(href='#info_sesiones') Datos de las Sesiones
+          |        
+          li.tab.col.s3.m3.l3
+            a.blue-text.text-darken-1(href='#info_grupos') Grupos
+          |             
+          li.tab.col.s3.m3.l3
+            a.blue-text.text-darken-1(href='#info_tutorados') Tutorados
+          |         
+      // Contenido Datos del urso
+      #info_curso.row
+        .col.s12.m12.l12(style='border-style: solid;') 
+          h6#tituloInfoCurso.red-text.text-darken-4(style='text-align: center; margin-top: 20px; display:none;') Datos del Curso
+          |           
+          form#modificar_curso(action='/modificar_curso', method='post', style='margin-top: 25px;', name='modificar_curso')
+            fieldset
+              legend.red-text.text-darken-4(style='text-align: center') Datos del Curso
+              |               
+              #curso_contenido.row
+                .row
+                  .input-field.col.s5.m5.l5(style='text-align: center; margin-left: 15px;')
+                    input#idCursoSel.teal-text.text-darken-3(type='text', name='idCursoSel', value='#{cursoSelec.id}', readonly='' hidden)
+                    |                     
+                    input#nombre.teal-text.text-darken-3(type='text', name='nombre', value='#{cursoSelec.nombre_curso}')
+                    |                     
+                    label.active(for='nombre') Nombre del Curso
+                  |                   
+                  .input-field.col.s2.m2.l2
+                    input#sesiones.teal-text.text-darken-3(type='number', name='sesiones', value='#{cursoSelec.num_sesiones}' readonly)
+                    |                     
+                    label.active(for='sesiones') N&uacute;mero de Sesiones
+                  |                   
+                  .col.s2.m2.l2
+                    label(for='fecha_inicio') Fecha Inicio
+                    |                     
+                    input#fecha_inicio.teal-text.text-darken-3.datepicker(name='fecha_inicio', type='text', value=new Date('#{cursoSelec.fecha_inicio}').toDateString())
+                  |                   
+                  .col.s2.m2.l2
+                    label(for='fecha_fin') Fecha Fin
+                    |                     
+                    input#fecha_fin.teal-text.text-darken-3.datepicker(name='fecha_fin', type='text', value=new Date('#{cursoSelec.fecha_fin}').toDateString())
+                |                 
+                .row
+                  .col.s2.m2.l2
+                  .input-field.col.s6.m6.l6(style='text-align: center; margin-left: 15px;')
+                    textarea#descripcion.materialize-textarea.teal-text.text-darken-3(name='descripcion' data-length='125') #{cursoSelec.descripcion}
+                    |                     
+                    label(for='descripcion', class="active") Descripci&oacute;n
+                  |                   
+                  .input-field.col.s3.m3.l3
+                    input#maxMiembros.validate.teal-text.text-darken-3(type='number', min='1', max='20', name='sesiones' value='12')
+                    |                     
+                    label.active(for='maxMiembros') Máximo de Miembros por Grupo
+                |                   
+                .divider.blue.lighten-1(style='')
+                .row
+                  .input-field.col.s12.m12.l12.center-align
+                    button#btModificarCurso.btn.waves-effect.waves-light(type='submit', onclick="this.enabled=false; this.value='Validando...'; return validar_modifCurso();") Modificar Curso
+                  |          
+                |                     
+          // Searador
+          // Searador
+          br
+          |           
+          .divider.red.lighten-1(style='')
+          |           
+          br
+        |         
+        .col.s12.m4.l2
+      // Contenido de las Sesiones
+      #info_sesiones.row
+        .col.s12.m12.l12(style='border-style: solid;') 
+          form#modificar_sesiones(action='/modificar_sesiones', method='post', style='margin-top: 25px;', name='modificar_sesiones')
+            fieldset
+              legend.red-text.text-darken-4(style='text-align: center') Datos de las Sesiones
+              |               
+              #sesiones_contenido.row
+                each item in cursoSelec.sesiones
+                  .row
+                    .input-field.col.s5.m5.l5
+                      input(id='id_sesion#{item.id}' name='id_sesion#{item.id}' type='text' value='#{item.id}' readonly hidden)
+                    |                
+                  |                   
+                  .row
+                    .input-field.col.s5.m5.l5(style='margin-left: 15px;')
+                      label(for='nombre_sesion#{item.id}') Nombre Sesion
+                      |                   
+                      input.blue-text.text-darken-4(id='nombre_sesion#{item.id}' name='nombre_sesion#{item.id}' type='text' value='#{item.numero_sesion}')
+                    | 
+                    .col.s3.m3.l3
+                      label(for='fecha_inicioN#{item.id}') Nueva Fecha Inicio #{item.numero_sesion}
+                      |                     
+                      input.teal-text.text-darken-3.datepicker(name='fecha_inicioN#{item.id}', type='text', id='fecha_inicioN#{item.id}' value=new Date('#{item.fecha_inicio}').toDateString())
+                    |                     
+                    .col.s3.m3.l3
+                      label(for='fecha_finN#{item.id}') Nueva Fecha Fin #{item.numero_sesion}
+                      |                     
+                      input.teal-text.text-darken-3.datepicker(name='fecha_finN#{item.id}', type='text', id='fecha_finN#{item.id}' value=new Date('#{item.fecha_fin}').toDateString())
+                    |                     
+                  |                   
+                  .divider.blue.lighten-1(style='')
+                .row
+                  input.teal-text.text-darken-3.col.s3.m3.l3(name='idsSesiones', type='text', value='#{cursoSelec.idSesiones}', readonly='' id='idsSesiones' hidden)
+                .row
+                  input.teal-text.text-darken-3.col.s3.m3.l3(name='idCursoSesiones', type='text', value='#{cursoSelec.id}', readonly='' id='idCursoSesiones' hidden)
+                .row
+                  .input-field.col.s12.m12.l12.center-align
+                    button#btModificarSesiones.btn.waves-effect.waves-light(type='submit', onclick="this.enabled=false; this.value='Validando...'; return validar_modifSesiones();") Modificar Sesiones
+                  |          
+                |                     
+          // Searador
+          br
+          |           
+          .divider.red.lighten-1(style='')
+          |           
+          br
+      // Contenido Datos de los grupos
+      #info_grupos.row
+        .col.s12.m12.l12(style='border-style: solid;')
+          #area_grupos.row(style='margin-top: 5px; margin-left: 0px;')
+            .col.s4.m4.l4(style='text-align: center; padding-top: 16px;')
+              input#btNuevoGrupo.waves-effect.waves-green.grey.btn.lighten-2.black-text(name='btNuevoGrupo', type='button' onclick='nuevoGrupo(#{cursoSelec.id})', value='Nuevo Grupo')
+            |           
+            // Tabla
+            #tabla_grupos.col.s11.m11.l11(style='text-align: center; margin-left: 20px;')
+              br
+              |               
+              table#contenido_tabla_grupo.display
+                thead#head_tabla_grupo
+                  tr
+                    th(style='text-align: center;') ID Grupo
+                    |                     
+                    th(style='text-align: center;') Nombre Grupo
+                    |                     
+                    th(style='text-align: center;') Tutor
+                    |                     
+                    th(style='text-align: center;') N&uacute;m. Miembros
+                |                 
+                tbody#body_tabla_grupo
+                  each item in cursoSelec.grupos
+                    tr(id='miembros#{item.id_grupo}' onclick='seleccionar_fila(id);')
+                      td(style='text-align: center;') #{item.id_grupo}
+                      |                     
+                      td(style='text-align: center;') #{item.nombre_grupo}
+                      |                     
+                      td(style='text-align: center;') #{item.tutor}
+                      |                     
+                      td(style='text-align: center;') #{item.miembros}
+                    |                   
+                  if(cursoSelec.grupos.length === 0)
+                    tr#filaVaia
+                      td(style='text-align: center; color: blue;' COLSPAN=4) SIN GRUPOS
+          // Searador
+          br
+          |           
+          .divider.red.lighten-1(style='')
+          |           
+          br
+      // Contenido Datos de los TUTORADOS
+      #info_tutorados.row
+        .col.s12.m12.l12(style='border-style: solid;')
+          #area_tutores.row(style='margin-top: 25px; margin-left: 15px;')
+            .col.s2.m2.l2
+            |             
+            .col.s2.m2.l2
+            // Tabla de Tutorados
+            #tabla_tutorados.col.s11.m11.l11(style='text-align: center; margin-left: 20px; overflow:scroll; height: 69%; width: 97%;')
+              br
+              |               
+              table#contenido_tabla_tutorados.display
+                //caption.red-text.text-darken-4 Lista de Tutorados
+                //|                 
+                thead#head_tabla_tutorados
+                  tr
+                    th(style='text-align: center;') Seleccionado
+                    |                     
+                    th(style='text-align: center;') Curp
+                    |                     
+                    th(style='text-align: center;') Nombre
+                |                 
+                tbody#body_tabla_tutorados
+                  each item in cursoSelec.tutorados
+                    tr(id='fila#{item.curp}')
+                      td(style='text-align: center;')
+                        input.filled-in(type='checkbox' id='#{item.curp}' value='#{item.curp}' onclick="seleccionar_tutorado('#{item.curp}');")
+                        |                       
+                        label(for='#{item.curp}')
+                      |                     
+                      td(style='text-align: center;' nowrap) #{item.curp}
+                      |                     
+                      td(style='text-align: center;' nowrap) #{item.nombre}
+                    |                   
+                  if(cursoSelec.tutorados.length === 0)
+                    tr#filaVaiaTutorados
+                      td(style='text-align: center; color: blue;' COLSPAN=3) SIN TUTORADOS
+                    |                   
+                    br
+            |             
+            .input-field.col.s5.m5.l5(style='text-align: center; margin-left: 20px;')
+              select#grupo_id_selec
+                option(value='0', disabled='', selected='') Seleccione un grupo
+                |                 
+                each item in cursoSelec.grupos
+                  option(value='#{item.id_grupo}') #{item.nombre_grupo}
+                  |                 
+              |               
+              label Grupo: 
+            |             
+            .input-field.col.s2.m2.l2
+              input#id_curso(type='text', name='id_curso' value='#{cursoSelec.id}' hidden)
+            |             
+            .input-field.col.s4.m4.l4(style='text-align: center;')
+              button#btAgregarAlGrupo.btn.waves-effect.waves-green.grey.lighten-2.black-text(name='btAgregarAlGrupo', type='button', style='font-size: 12px;' onclick="agregarAlGrupo();") Agregar al Grupo
+          // Searador
+          br
+          |           
+          .divider.red.lighten-1(style='')
+          |           
+          br
+          if(selec_grupo)
+            script(type='text/javascript') swal('#{cursoSelec.titulo}', '#{cursoSelec.listaTutoradosGrupo}','info');
+          else if(sesionModif)
+            script(type='text/javascript') swal('Modificado', 'Sesiones Modificadas Correctamente','success');
+          else if(tutoradosAgregados)
+            script(type='text/javascript') swal('Asignados', 'Tutorados Asignados Correctamente','success');
+          else if(cursoModif)
+            script(type='text/javascript') swal('Modificado', 'Datos del Curso Modificados Correctamente','success');
+    br   
+    include ./includes/footer.jade
+    |     
+    // Import jQuery before materialize.js
+    script(type='text/javascript', src='materialize/js/materialize.min.js')
+    |     
+    script(type='text/javascript', src='js/script.js')

@@ -1,0 +1,83 @@
+html
+  head
+    include ./includes/librerias.jade
+    |     
+    script(src='js/sweetAlert.js')
+  |   
+  style.
+    .parallax-container {
+      height: "50px";
+    }
+  body(background="asset/ico/fondo2.jpg")
+    if(datos.logeado)
+      if(datos.esAutoridadEducativa === "es admin")
+        // AQUIE SE MOSTRARAN LAS OPCIONES DEL ADMIN
+        include ./includes/opciones_admin_menu.jade
+        |     
+        include ./includes/barra_menu_admin.jade
+        |     
+      else if(datos.esAutoridadEducativa == 'es tutor')
+        include ./includes/barra_menu_tutor.jade
+        |     
+      else if(datos.esAutoridadEducativa == 'es tutorado')
+        include ./includes/barra_menu_tutorado.jade
+        |     
+    else
+      header
+        nav.navbar-fixed(style='height: 50')
+          .nav-wrapper.grey.lighten-3.valign-wrapper
+            a.btn-floating.pulse.grey.darken-3(href='/login' style='width: 100; border-radius: 0; margin-left: 90%; padding-left: 5px; ') Iniciar Sesión
+      .row(style='text-align: center;')
+        img.responsive-img(src='asset/ico/logoGrande.png' width='100%', height='auto' )
+    br
+    .row(style='text-align: center;')
+      .carousel.carousel-slider(style='width: 98%; margin-left: 1%;' )
+        a.carousel-item
+          img(src='/asset/inicial/imag1.jpg')
+        a.carousel-item
+          img(src='/asset/inicial/imag2.jpg')
+        a.carousel-item
+          img(src='/asset/inicial/imag3.jpg')
+        a.carousel-item
+          img(src='/asset/inicial/imag5.jpg')
+        a.carousel-item
+          img(src='/asset/inicial/imag6.jpg')
+        a.carousel-item
+          img(src='/asset/inicial/imag7.jpg')
+    br
+    .container
+      .row
+        .col.s12.m8.l8
+          .card-panel.light-white
+            h4 Bienvenida
+            br
+            p.grey-text.text-darken-4(align='justify') La Secretaría de Educación Pública le da la más cordial bienvenida a la Tutoría en línea para Docentes y Técnicos Docentes de Educación Básica, la cual tiene como propósitos:
+            p.grey-text.text-darken-4(align='justify' style='margin-left: 5%;') a) Fortalecer las competencias de este personal para favorecer su inserción en el trabajo educativo, la autonomía profesional, la participación en la escuela, la comunicación con los padres de familia y la permanencia en el Servicio Profesional Docente. 
+            p.grey-text.text-darken-4(align='justify' style='margin-left: 5%;') b) Contribuir a la mejora de la práctica profesional de dicho personal, de modo que cuente con más y mejores capacidades para atender las prioridades establecidas en la Educación Básica y para propiciar el máximo logro de aprendizaje de sus alumnos.
+            p.grey-text.text-darken-4(align='justify') Le invitamos a explorar la plataforma virtual y las diferentes actividades que contiene, así como que se ponga en contacto con su Tutor y compañeros de grupo.
+        .col.s12.m4.l4
+          .card-panel.white
+            h4 Aviso Importante
+            br
+            strong Las fechas de inicio de la Tutoría en el año 2017 serán las siguientes:
+            p.grey-text.text-darken-4(align='justify' style='margin-left: 5%;') Semana Introductoria del 30 de octubre al 10 de noviembre.
+            p.grey-text.text-darken-4(align='justify' style='margin-left: 5%;') Módulo I, del 13 de noviembre al 8 de diciembre.
+            p.grey-text.text-darken-4(align='justify' style='margin-left: 5%;') Módulo III, del 13 de noviembre al 8 de diciembre.
+            
+
+
+
+    br
+    if(datos.avisoActual)
+      script(type='text/javascript').
+            var texto ="#{datos.texto}";
+            texto = texto.split('&lt;br/&gt;').join('<br/>');
+            texto = texto.split('&lt;b&gt;').join('<b>');
+            texto = texto.split('&lt;/b&gt;').join('</b>');
+            swal({title: "#{datos.titulo}", html: texto, type: 'info'});
+    include ./includes/footer.jade
+    |     
+    // Import jQuery before materialize.js
+    script(type='text/javascript', src='materialize/js/materialize.min.js')
+    |     
+    script(type='text/javascript', src='js/script.js')

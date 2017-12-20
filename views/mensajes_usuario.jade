@@ -1,0 +1,88 @@
+html
+  head
+    include ./includes/librerias.jade
+    |     
+    script(type='text/javascript', src='js/mensajes.js')
+    |     
+    link(rel='stylesheet', type='text/css', href='//cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.1.0/material.min.css')
+    |     
+    link(rel='stylesheet', type='text/css', href='https://cdn.datatables.net/1.10.16/css/dataTables.material.min.css')
+    |     
+    script(type='text/javascript', src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js")
+    |          
+    script(type='text/javascript', src="https://cdn.datatables.net/1.10.16/js/dataTables.material.min.js")
+    |          
+    script(type='text/javascript').
+      $(document).ready(function(){
+        $('#contenido_tabla').DataTable({
+          language: {
+                "zeroRecords": "Sin Concidencias",
+                "info": "",
+                "infoEmpty": "",
+                "infoFiltered": "",
+                "lengthMenu": "Mostrar _MENU_ registros por página",
+                "search": "Buscar:",
+                "paginate": {
+                  "first":      "Primero",
+                  "last":       "Ultimo",
+                  "next":       "Siguiente",
+                  "previous":   "Aterior"
+                },
+                'searchPlaceholder': "Buscar Usuario"
+              }
+
+        });
+      });
+    |   
+  |   
+  body
+    // AQUIE SE MOSTRARAN LAS OPCIONES DEL ADMIN
+    include ./includes/opciones_admin_menu.jade
+    |     
+    include ./includes/barra_menu_admin.jade
+    |     
+    #contenedor.container
+      .row
+        #listaContactos.col.s12.m4.l3(style='text-align: center; overflow:scroll; height: 88%; border: solid; border-width: 1px;border-radius: 4px;')
+          h5.red-text.text-darken-4 Lista de Cotactos
+          br
+          |           
+          table#contenido_tabla(width="90%;")
+            thead#head_tabla
+              tr
+                th(style='text-align: center;') Nombre
+                |                   
+            |             
+            tbody#body_tabla
+              each item in listaUsuarios
+                tr(id='fila#{item.curp}' onclick='seleccionar_usuarioA(\'#{item.curp}\', \'#{item.nombre}\');')
+                  td #{item.nombre}
+                  |                 
+        |     
+        #areaMensajes.col.s12.m8.l9(style='text-align: center; overflow:hidden; height: 88%; border: solid; width=95%; border-width: 1px;border-radius: 4px;border-radius: 4px;')
+          .row
+            #nombreUsuario.col.s12.m12.l12.card-panel.red.lighten-3
+              input.black-text.text-darken-3(style='text-align: right; border:none; ' value="USUARIO" readonly id='nombre_usuario_sel')
+            #mensajesUsuario.col.s12.m12.l12(style='text-align: center; overflow:auto; height: 79%; padding: 12px 20px;border-radius: 4px;')
+              textarea#mensajesUsuarioText.materialize-textarea.grey-text.text-darken-3(name='mensajesUsuarioText' readonly)
+                |  #{hist}
+            |     
+            #areaEnviarMensajeNuevo.col.s12.m12.l12.row.card-panel.grey.darken-2( name='areaEnviarMensajeNuevo')
+              form(action='/nuevo_mensaje', method='post' id='datos')
+                fieldset
+                  #curpUsuario.col.s12.m12.l12.card-panel.red.lighten-3.hidden
+                    input.black-text.text-darken-3(style='text-align: right; border:none; ' value="CURP" readonly id='curp_usuario_sel' name='curp_usuario_sel')
+                  #mensajeNuevoUsuario.col.s8.m8.l8
+                    input.grey-text.text-lighten-5(style='text-align: left; ' placeholder="Escribe tu mensaje..." id='text_mensaje' name='text_mensaje')
+                  #btnEnviarMensaje.col.s4.m4.l4
+                    button.waves-effect.waves-light.btn.teal.lighten-1.lighten-2.grey-text.text-lighten-5(type='submit', onclick='return enviar_mensaje();' style='text-align: left; margin-top: 12px;border-radius: 4px;' id='btnEnviar' disabled) Enviar
+            |     
+          |     
+    |     
+    br   
+    include ./includes/footer.jade
+    |     
+    // Import jQuery before materialize.js
+    script(type='text/javascript', src='materialize/js/materialize.min.js')
+    |     
+    script(type='text/javascript', src='js/script.js')

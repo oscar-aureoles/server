@@ -1,0 +1,130 @@
+html
+  head
+    include ./includes/librerias.jade
+    |     
+    script(type='text/javascript', src='js/codigo_nuevo_grupo.js')
+    |     
+    link(rel='stylesheet', type='text/css', href='//cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.1.0/material.min.css')
+    |     
+    link(rel='stylesheet', type='text/css', href='https://cdn.datatables.net/1.10.16/css/dataTables.material.min.css')
+    |     
+    link(rel='stylesheet', type='text/css', href='https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css')
+    |     
+    script(type='text/javascript', src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js")
+    |          
+    script(type='text/javascript', src="https://cdn.datatables.net/1.10.16/js/dataTables.material.min.js")
+    |             
+    script(type='text/javascript').
+      $(document).ready(function(){
+        $('table.display').DataTable({
+          language: {
+                "zeroRecords": "Sin Concidencias",
+                "info": "Mostrado página _PAGE_ de _PAGES_, _START_ a _END_ de _TOTAL_ registros",
+                "infoEmpty": "No hay registros disponibles",
+                "infoFiltered": "(filtrado de los _MAX_ registros totales)",
+                "lengthMenu": "Mostrar _MENU_ registros por página",
+                "search": "Buscar:",
+                "paginate": {
+                  "first":      "Primero",
+                  "last":       "Ultimo",
+                  "next":       "Siguiente",
+                  "previous":   "Aterior"
+                },
+                'searchPlaceholder': "Buscar Registros"
+              }
+
+        });
+      });
+    |   
+  |   
+  body
+    // AQUIE SE MOSTRARAN LAS OPCIONES DEL ADMIN
+    include ./includes/opciones_admin_menu.jade
+    |     
+    include ./includes/barra_menu_admin.jade
+    |     
+    // Contenido de la PAGINA
+    #contenedor.container
+      #info_grupo.row
+        .col.s12.m4.l2
+        |         
+        .col.s12.m12.l12(style='border-style: solid;')
+          br
+          form(action='/nuevo_grupo', method='post' id='datos')
+            fieldset
+              legend.red-text.text-darken-4(style='text-align: center') Datos del Grupo
+              |               
+              #grupo_contenido.row
+                .row
+                  .col.s3.m3.l3
+                  .input-field.col.s6.m6.l6(style='text-align: center; margin-left: 15px;')
+                    input#nombre.validate.teal-text.text-darken-3(type='text', name='nombre')
+                    |                     
+                    label.active(for='nombre') Nombre del Grupo
+                  |                   
+                |                 
+                // Searador
+                .divider.red.lighten-1(style='')
+                |                 
+                br
+                // Seleionar Tutor
+                label.red-text.text-darken-4(style='text-align: center')
+                  h6 Lista de Tutores Disponibles
+                |                 
+                #tabla_tutores.row
+                  // Tabla        
+                  .col.s11(style='text-align: center; overflow:scroll; height: 50%; width: 97%; margin-left: 20px;')
+                    br
+                    |           
+                    table#contenido_tabla.display(width="100%")
+                      thead#head_tabla
+                        tr
+                          th(style='text-align: center;') Seleccionado
+                          |                   
+                          th(style='text-align: center;') Curp
+                          |                   
+                          th(style='text-align: center;') Nombre
+                      |             
+                      tbody#body_tabla
+                        each item in list
+                          tr(id='fila#{item.curp}')
+                            td(style='text-align: center;')
+                              input.filled-in(type='radio' id='#{item.curp}' value='#{item.curp}' name="group1" onclick="seleccionar_tutor('#{item.curp}');")
+                              |                       
+                              label(for='#{item.curp}')
+                            |                     
+                            td(style='text-align: center;') #{item.curp}
+                            |                     
+                            td(style='text-align: center;') #{item.nombreTutor}
+                          |                   
+                .row
+                  input-field.col.s3.m3.l3
+                    input#tutorSel(type='text', name='tutorSel' hidden) 
+                  input-field.col.s3.m3.l3
+                    input#id_curso(type='text', name='id_curso' value='#{id_curso}' hidden) 
+                // Searador
+                .divider.red.lighten-1(style='')
+                .row
+                  .input-field.col.s3.m3.l3
+                  |                 
+                  .input-field.col.s3.m3.l3
+                  |                 
+                  .input-field.col.s3.m3.l3(style='text-align: center;')
+                    button.waves-effect.waves-light.btn.grey.lighten-2.black-text(type='button', onclick='cancelar_registro(#{id_curso});') Cancelar
+                  |                 
+                  .input-field.col.s3.m3.l3(style='text-align: center;')
+                    button#btRegistrarGrupo.btn.waves-effect.waves-light(type='submit', onclick="this.enabled=false; this.value='Validando...'; return validar_grupo();") Registrar Grupo
+                  |          
+        |         
+        .col.s12.m4.l2        
+        if(error)
+            script(type='text/javascript') swal('Error:', 'El grupo no pudo ser registrado','error');
+        if(guardado)
+            script(type='text/javascript') swal('Guardado:', 'Grupo Registrado Correctamente','success');
+    br   
+    include ./includes/footer.jade
+    |     
+    // Import jQuery before materialize.js
+    script(type='text/javascript', src='materialize/js/materialize.min.js')
+    |     
+    script(type='text/javascript', src='js/script.js')

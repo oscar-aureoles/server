@@ -1,0 +1,88 @@
+html
+  head
+    include ./includes/librerias.jade
+    |     
+    script(type='text/javascript', src='js/codigo_grupo_sel.js')
+    |     
+    link(rel='stylesheet', type='text/css', href='//cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.1.0/material.min.css')
+    |     
+    link(rel='stylesheet', type='text/css', href='https://cdn.datatables.net/1.10.16/css/dataTables.material.min.css')
+    |     
+    link(rel='stylesheet', type='text/css', href='https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css')
+    |     
+    script(type='text/javascript', src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js")
+    |          
+    script(type='text/javascript', src="https://cdn.datatables.net/1.10.16/js/dataTables.material.min.js")
+    |          
+    script(type='text/javascript').
+      $(document).ready(function(){
+        $('table.display').DataTable({
+          language: {
+                "zeroRecords": "Sin Concidencias",
+                "info": "Mostrado página _PAGE_ de _PAGES_, _START_ a _END_ de _TOTAL_ registros",
+                "infoEmpty": "No hay registros disponibles",
+                "infoFiltered": "(filtrado de los _MAX_ registros totales)",
+                "lengthMenu": "Mostrar _MENU_ registros por página",
+                "search": "Buscar:",
+                "paginate": {
+                  "first":      "Primero",
+                  "last":       "Ultimo",
+                  "next":       "Siguiente",
+                  "previous":   "Aterior"
+                },
+                'searchPlaceholder': "Buscar Registros"
+              }
+        });
+      });
+    |    
+  |   
+  body
+    // AQUIE SE MOSTRARAN LAS OPCIONES DEL ADMIN
+    include ./includes/opciones_admin_menu.jade
+    |     
+    include ./includes/barra_menu_admin.jade
+    |     
+    // Contenido de la PAGINA
+    #contenedor.container(style='border-style: solid; border-radius: 8px; padding-right: 5px; padding-left: 5px;')
+      // Contenido Datos de los miembros del gruo
+      h6.red-text.text-darken-4(style='text-align: center; margin-top: 20px;') Miembros del Grupo '#{cursoSelec.titulo}'
+      |           
+      #tabla_usuarios.row
+        #tabla_grupos.col.s11.m11.l11(style='text-align: center; margin-left: 20px;')
+              br
+              |               
+              table#contenido_tabla.display
+                caption.red-text.text-darken-4 Lista de Miembros
+                |             
+                thead#head_tabla_grupo
+                  tr
+                    th(style='text-align: center;') Curp
+                    |                     
+                    th(style='text-align: center;') Nombre
+                |                 
+                tbody#body_tabla
+                  each item in cursoSelec.listaTutoradosGrupoX
+                    tr(id=item.curp)
+                      td(style='text-align: center;') #{item.curp}
+                      |                     
+                      td(style='text-align: center;') #{item.nombre}
+                    |                   
+                  if(cursoSelec.listaTutoradosGrupoX === 0)
+                    tr#filaVaia
+                      td(style='text-align: center; color: blue;' COLSPAN=3) SIN MIEMBROS
+          // Searador
+          br
+          |           
+          .divider.red.lighten-1(style='')
+          |           
+          br
+      div
+        a(href='/curso/#{cursoSelec.id}')
+          h6.center-align Regresar    
+    br   
+    include ./includes/footer.jade
+    |     
+    // Import jQuery before materialize.js
+    script(type='text/javascript', src='materialize/js/materialize.min.js')
+    |     
+    script(type='text/javascript', src='js/script.js')

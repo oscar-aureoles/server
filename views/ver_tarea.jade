@@ -1,0 +1,63 @@
+html
+  head
+    include ./includes/librerias.jade
+    |     
+    script(type='text/javascript', src='js/subir_tarea.js')
+    |     
+  |   
+  body
+    include ./includes/barra_menu_tutor.jade
+    |     
+    // Contenido de la PAGINA
+    #contenedor.container(style='padding-right: 5px;')
+      form(action='/ver_tarea', method='post')
+        fieldsetstyle(style='border-style: none;')
+          .row(style='border-style: solid; border-radius: 8px; padding-right: 5px; margin-top: 1%;')
+            .col.s4.m4.l4.center
+              input#FIActividad.blue-text.darken-3(type='text', name='FIActividad', value='Fecha Inicio: #{new Date(datos.datosTarea.fecha_inicio).toDateString()}' readonly style='border:none; text-align:center;')
+            .col.s4.m4.l4.center
+              input#nombreActividad.red-text.darken-3(type='text', name='nombreActividad', value='#{datos.datosTarea.nombre_titulo}' readonly style='border:none; text-align:center;')
+            .col.s4.m4.l4.center
+              input#FFActividad.blue-text.darken-3(type='text', name='FFActividad', value='Fecha Limite: #{new Date(datos.datosTarea.fecha_fin).toDateString()}' readonly style='border:none; text-align:center;')
+            center
+              .divider.red.lighten-1(style='border-style: dotted; border-width: 1px; width: 95%;')
+            br
+            .row
+              each item in datos.tutorados
+                .row.col.s12.m12.l12(style='border:solid; text-align:center; border-width: 1; width: 90%; margin-left: 5%;')
+                  .col.s12.m5.l5
+                    input.indigo-text.darken-4(type='text' value='Datos Tutorado: ' readonly style='border:none; text-align:center;')
+                    br
+                    input.black-text(type='text' value='#{item.nombre}' readonly style='border:none; text-align:center;')
+                    input.black-text(type='text' value='#{item.curp_usuario}' readonly style='border:none; text-align:center;')
+                  if(item.status_actividad == 1)
+                    .col.s12.m4.l4
+                      input.green-text.darken-3(type='text' value='Fecha Realización: ' readonly style='border:none; text-align:center;')
+                      input.green-text.darken-3(type='text' value='#{new Date(item.fecha_realizacion)}' readonly style='border:none; text-align:center;')
+                    .col.s12.m3.l3(style='margin-top: 10%;')
+                      a.blue-text.darken-3(href='#{item.ruta}') Descargar Tarea
+                  else if(item.status_actividad == 0)
+                    .col.s12.m7.l7
+                      input.red-text.darken-3(type='text' value='Status Tarea: ' readonly style='border:none; text-align:center;')
+                      input.red-text.darken-3(type='text' value='Tarea no realizada' readonly style='border:none; text-align:center;')
+            .row
+              .col.s6.m9.l9
+              .col.s3.m3.l3
+                button.waves-effect.waves-light.btn.grey.lighten-2.black-text(type='button', onclick='redireccionar(#{datos.datosTarea.id_curso})' ) Regresar
+            //-.row
+            //-  each item in datos.tutorados
+            //-    '#{item.curp_usuario}'
+                //- .col.s5.m5.l5
+                //-   input#statusActividad.indigo-text.darken-4(type='text', name='statusActividad', value='Status de la Tarea: ' readonly style='border:none; text-align:center;')
+                //- .col.s3.m3.l3
+                //-   input#statusActividad.green-text.darken-4(type='text', name='statusActividad', value='Tarea Cargada' readonly style='border:none; text-align:center;')
+                //- .col.s3.m3.l3
+                //-   input#fechastatusActividad.blue-grey-text.darken-4(type='text', name='fechastatusActividad', value='#{new Date(datos.datosTarea.fecha_realizacion)}' readonly style='border:none; text-align:center;')
+    
+    br   
+    include ./includes/footer.jade
+    |     
+    // Import jQuery before materialize.js
+    script(type='text/javascript', src='materialize/js/materialize.min.js')
+    |     
+    script(type='text/javascript', src='js/script.js')

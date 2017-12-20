@@ -1,0 +1,332 @@
+html
+  head
+    include ./includes/librerias.jade
+    |     
+    script(type='text/javascript', src='js/codigo_reportes.js')
+    |     
+    link(rel='stylesheet', type='text/css', href='//cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.1.0/material.min.css')
+    |     
+    link(rel='stylesheet', type='text/css', href='https://cdn.datatables.net/1.10.16/css/dataTables.material.min.css')
+    |     
+    link(rel='stylesheet', type='text/css', href='https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css')
+    |     
+    script(type='text/javascript', src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js")
+    |          
+    script(type='text/javascript', src="https://cdn.datatables.net/1.10.16/js/dataTables.material.min.js")
+    |          
+    script(type='text/javascript').
+      $(document).ready(function(){
+        $('table.display').DataTable({
+          language: {
+                "zeroRecords": "Sin Concidencias",
+                "info": "Mostrado página _PAGE_ de _PAGES_, _START_ a _END_ de _TOTAL_ registros",
+                "infoEmpty": "No hay registros disponibles",
+                "infoFiltered": "(filtrado de los _MAX_ registros totales)",
+                "lengthMenu": "Mostrar _MENU_ registros por página",
+                "search": "Buscar:",
+                "paginate": {
+                  "first":      "Primero",
+                  "last":       "Ultimo",
+                  "next":       "Siguiente",
+                  "previous":   "Aterior"
+                },
+                'searchPlaceholder': "Buscar Registros"
+              }
+        });
+      });
+    |   
+    style.
+      .shaw:hover{
+      box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+      border: 2px solid #4CAF50;
+      }
+      .shaw{
+      background-color: transparent;
+      border-color: transparent;
+      }
+      .tabs .indicator { background-color: #00695c; }
+  |   
+  body(style='background-color: white;')
+    // AQUIE SE MOSTRARAN LAS OPCIONES DEL ADMIN
+    include ./includes/opciones_admin_menu.jade
+    |     
+    include ./includes/barra_menu_admin.jade
+    |     
+    // Contenido de la PAGINA
+    #contenedor.container
+      .row.col.s12
+        ul#tabs-swipe-demo.tabs
+          li.tab.col.s3.m3.l3
+            a.blue-text.text-darken-1(href='#info_curso') Curso
+          |             
+          if(datos.id_cursoSel != undefined & datos.id_grupoSel != undefined)
+            li.tab.col.s3.m3.l3
+              a.blue-text.text-darken-1(href='#info_grupo') Grupo
+            |        
+          else if(datos.id_cursoSel != undefined)
+            li.tab.col.s3.m3.l3
+              a.active.blue-text.text-darken-1(href='#info_grupo') Grupo
+            |        
+          else
+            li.tab.col.s3.m3.l3.disabled
+              a.blue-text.text-darken-1(href='#info_grupo') Grupo
+            |        
+          if(datos.id_grupoSel != undefined & datos.id_sesionSel == undefined)
+            li.tab.col.s3.m3.l3
+              a.active.blue-text.text-darken-1(href='#info_sesion') Semana
+            |             
+          else if(datos.id_grupoSel != undefined)
+            li.tab.col.s3.m3.l3
+              a.blue-text.text-darken-1(href='#info_sesion') Semana
+            |             
+          else
+            li.tab.col.s3.m3.l3.disabled
+              a.blue-text.text-darken-1(href='#info_sesion') Semana
+            |             
+          if(datos.id_sesionSel != undefined)
+            li.tab.col.s3.m3.l3
+              a.active.blue-text.text-darken-1(href='#info_resultado') Resultado
+            |         
+          else
+            li.tab.col.s3.m3.l3.disabled
+              a.blue-text.text-darken-1(href='#info_resultado') Resultado
+            |         
+      #info_curso.row(style='border-style: solid;')
+        .col.s12.m12.l12
+          input#cursoSel(type='text', name='cursoSel' value='' hidden)
+          |           
+          h6#tituloInfoCurso.red-text.text-darken-4(style='text-align: center; margin-top: 20px;') Seleccione un Curso
+          |           
+        |         
+        #tabla_cursos.col.s11.m11.l11(style='text-align: center; margin-left: 20px; overflow:scroll; height: 69%; width: 97%;')         
+              table.display
+                thead#head_tabla_cursos
+                  tr
+                    th(style='text-align: center;') Seleccionado
+                    |                     
+                    th(style='text-align: center;') ID
+                    |                     
+                    th(style='text-align: center;') Nombre del Curso
+                |                 
+                tbody#body_tabla_cursos
+                  each item in datos.listaCursos
+                    tr(id='fila#{item.id}')
+                      td(style='text-align: center;')
+                        input.filled-in(type='radio' id='R#{item.id}' value='#{item.id}' name="groupcurso" onclick="seleccionar_curso('#{item.id}');")
+                        |                       
+                        label(for='R#{item.id}')
+                      |                     
+                      td(style='text-align: center;') #{item.id}
+                      |                     
+                      td(style='text-align: center;') #{item.nombre_curso}
+        .col.s3.m3.l8
+        .input-field.col.s3.m3.l3(style='text-align: center; margin-bottom: 10px;')
+          button#btRegistrarCurso.btn.waves-effect.waves-light(type='button', onclick="validar_curso()") Continuar
+        |          
+      #info_grupo.row(style='border-style: solid;')
+        .col.s12.m12.l12
+          input#grupoSel(type='text', name='grupoSel' value='' hidden)
+          |           
+          h6#tituloInfoGrugrupoSelo.red-text.text-darken-4(style='text-align: center; margin-top: 20px;') Seleccione un Grupo
+          |           
+        |         
+        #tabla_grupos.col.s11.m11.l11(style='text-align: center; margin-left: 20px; overflow:scroll; height: 69%; width: 97%;')
+          table.display
+            thead#head_tabla_grupos
+              tr
+                th(style='text-align: center;') Seleccionado
+                |                     
+                th(style='text-align: center;') Nombre del Grupo
+                |                     
+                th(style='text-align: center;') Nombre del Tutor
+            |                 
+            tbody#body_tabla_grupos
+              if(datos.id_cursoSel != undefined)
+                //- if(datos.listaGrupos.length > 1)
+                //-   tr(id='filaGTodos')
+                //-       td(style='text-align: center;' )
+                //-         input.filled-in(type='radio' id='RGTodos' value='Todos' name="groupgrupo" onclick="seleccionar_grupoTodos();")
+                //-         |                       
+                //-         label(for='RGTodos')
+                //-       |                     
+                //-       td(style='text-align: center;' colspan='2') TODOS
+                //-       |                     
+                //-       td
+
+                each item in datos.listaGrupos
+                  tr(id='filaG#{item.id}')
+                      td(style='text-align: center;')
+                        input.filled-in(type='radio' id='RG#{item.id}' value='#{item.id}' name="groupgrupo" onclick="seleccionar_grupo('#{item.id}');")
+                        |                       
+                        label(for='RG#{item.id}')
+                      |                     
+                      td(style='text-align: center;') #{item.nombre_grupo}
+                      |                     
+                      td(style='text-align: center;') #{item.nombrep_tutor}
+        .col.s3.m3.l8
+        .input-field.col.s3.m3.l3(style='text-align: center; margin-bottom: 10px;')
+          button#btRegistrarGrupo.btn.waves-effect.waves-light(type='button', onclick="validar_grupo()") Continuar
+        |          
+      #info_sesion.row(style='border-style: solid;')
+        .col.s12.m12.l12
+          input#sesionSel(type='text', name='sesionSel' value='' hidden)
+          |           
+          h6#tituloInfoSesionSelo.red-text.text-darken-4(style='text-align: center; margin-top: 20px;') Seleccione una Semana
+          |           
+        |         
+        #tabla_sesion.col.s11.m11.l11(style='text-align: center; margin-left: 20px; overflow:scroll; height: 69%; width: 97%;')
+          table.display
+            thead#head_tabla_sesion
+              tr
+                th(style='text-align: center;') Seleccionado
+                |                     
+                th(style='text-align: center;') Nombre de la Semana
+                |                     
+                th(style='text-align: center;') Periodo
+            |                 
+            tbody#body_tabla_sesion
+              if(datos.id_grupoSel != undefined)
+                each item in datos.listaSesiones
+                  tr(id='filaS#{item.id}')
+                    td(style='text-align: center;')
+                      input.filled-in(type='radio' id='RS#{item.id}' value='#{item.id}' name="groupsesion" onclick="seleccionar_sesion('#{item.id}');")
+                      |                       
+                      label(for='RS#{item.id}')
+                    |                     
+                    td(style='text-align: center;') #{item.numero_sesion}
+                    |                     
+                    td(style='text-align: center;') #{new Date(item.fecha_inicio).toDateString()} - #{new Date(item.fecha_fin).toDateString()}
+                if(datos.listaSesiones.length > 1)
+                  tr(id='filaSTodos')
+                    td(style='text-align: center;' )
+                      input.filled-in(type='radio' id='RSTodos' value='Todos' name="groupsesion" onclick="seleccionar_sesionTodos();")
+                      |                       
+                      label(for='RSTodos')
+                    |                     
+                    td(style='text-align: center;' colspan='2') TODAS
+                    |                     
+                    td
+        .col.s3.m3.l8
+        .input-field.col.s3.m3.l3(style='text-align: center; margin-bottom: 10px;')
+          button#btRegistrarSesion.btn.waves-effect.waves-light(type='button', onclick="validar_sesion()") Continuar
+        |          
+      #info_resultado.row(style='border-style: solid;')
+        .col.s3.m3.l8
+        .input-field.col.s3.m3.l3(style='text-align: center; margin-bottom: 10px;')
+          button#btExortarExcel.btn.waves-effect.waves-light(type='button', onclick="descargarExcel()") Descargar Resultado
+        |          
+        .col.s12.m12.l12
+          h6#tituloInfoSesionSelo.red-text.text-darken-4(style='text-align: center; margin-top: 20px;') Lista de Actividades Tutor-Tutorado
+          |           
+        |         
+        #tabla_resultadoConImagen.col.s11.m11.l11(style='text-align: center;  overflow:scroll; height: 69%; width: 97%;')
+          table.display
+            thead#head_tabla_resultado
+              if(datos.id_sesionSel != undefined)
+                if(datos.id_sesionSel != 'Todos')
+                  tr
+                    th(style='text-align: center;') Tipo
+                    |                     
+                    th(style='text-align: center;') Curp
+                    |                     
+                    each item in datos.listaTituloActividades
+                      th(style='text-align: center;') #{item.nombre_titulo}
+                    |                     
+                else
+                  tr
+                    th(style='text-align: center;' rowspan="2") Tipo
+                    |                     
+                    th(style='text-align: center;' rowspan="2") Curp
+                    |                     
+                    each item in datos.listaTituloActividades
+                      th(style='text-align: center; color: #3949ab;' colspan="1" nowrap) #{item.numero_sesion}
+                    |                     
+                  tr
+                    each item in datos.listaTituloActividades
+                      th(style='text-align: center;' colspan="1" ) #{item.nombre_titulo}
+                    |                     
+
+            |                 
+            tbody#body_tabla_resultado
+              if(datos.id_sesionSel != undefined)
+                each item in datos.listaTutorTutorados
+                  tr(id='filaTutorTutodaro')
+                    td(style='text-align: center;' ) #{item.tipo}
+                    |                     
+                    td(style='text-align: center;' ) #{item.curp_usuario}
+                    |                     
+                    each itemN in item.actividadesRealizadas
+                      td(style='text-align: center;' )
+                        if(itemN.status_actividad == '0')
+                          i.material-icons.prefix
+                            img(src='asset/ico/tacha.png', width='25', height='25')
+                        else if(itemN.status_actividad == '1')
+                          i.material-icons.prefix
+                            img(src='asset/ico/realizada.png', width='25', height='25')
+                      |                     
+        #tabla_resultadoN.col.s11.m11.l11(style='text-align: center;  overflow:scroll; height: 69%; width: 97%;' hidden)
+          table#tabla_resultado
+            thead#head_tabla_resultadoN
+              tr
+                th(style='text-align: center;') Tipo
+                |                     
+                th(style='text-align: center;') Curp
+                |                     
+                if(datos.id_sesionSel != undefined)
+                  each item in datos.listaTituloActividades
+                    th(style='text-align: center;') #{item.nombre_titulo}
+                  |                     
+            |                 
+            tbody#body_tabla_resultadoN
+              if(datos.id_sesionSel != undefined)
+                each item in datos.listaTutorTutorados
+                  tr
+                    td #{item.tipo}
+                    |                     
+                    td #{item.curp_usuario}
+                    |                     
+                    each itemN in item.actividadesRealizadas
+                      td #{itemN.status_actividad}
+                        if(itemN.status_actividad == '0')
+                          NoRealizada
+                        else if(itemN.status_actividad == '1')
+                          Realizada
+                      |                     
+
+    if(datos.id_cursoSel != undefined)
+      script(type='text/javascript').
+        document.getElementById('fila#{datos.id_cursoSel}').style.background = 'grey';
+        document.getElementById('fila#{datos.id_cursoSel}').style.color = 'white';
+        document.getElementById('cursoSel').value = '#{datos.id_cursoSel}';
+        document.getElementById('R#{datos.id_cursoSel}').checked = true;
+    if(datos.id_grupoSel != undefined)
+      script(type='text/javascript').
+        document.getElementById('grupoSel').value = '#{datos.id_grupoSel}';
+        if('#{datos.id_grupoSel}' == 'Todos'){
+          document.getElementById('filaGTodos').style.background = 'grey';
+          document.getElementById('filaGTodos').style.color = 'white';
+          document.getElementById('RGTodos').checked = true;
+        }else{
+          document.getElementById('filaG#{datos.id_grupoSel}').style.background = 'grey';
+          document.getElementById('filaG#{datos.id_grupoSel}').style.color = 'white';
+          document.getElementById('RG#{datos.id_grupoSel}').checked = true;
+        }
+    if(datos.id_sesionSel != undefined)
+      script(type='text/javascript').
+        document.getElementById('sesionSel').value = '#{datos.id_sesionSel}';
+        if('#{datos.id_sesionSel}' == 'Todos'){
+          document.getElementById('filaSTodos').style.background = 'grey';
+          document.getElementById('filaSTodos').style.color = 'white';
+          document.getElementById('RSTodos').checked = true;
+        }else{
+          document.getElementById('filaS#{datos.id_sesionSel}').style.background = 'grey';
+          document.getElementById('filaS#{datos.id_sesionSel}').style.color = 'white';
+          document.getElementById('RS#{datos.id_sesionSel}').checked = true;
+        }
+    br   
+    include ./includes/footer.jade
+    |     
+    // Import jQuery before materialize.js
+    script(type='text/javascript', src='materialize/js/materialize.min.js')
+    |     
+    script(type='text/javascript', src='js/script.js')

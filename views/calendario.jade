@@ -1,0 +1,101 @@
+html
+  head
+    meta(charset='UTF-8')
+    |     
+    link(rel='shortcut icon' type='image/x-icon' href='asset/ico/favicon.ico')
+    |     
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    |     
+    link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
+    |   
+    // Bootstrap
+    link(rel='stylesheet', href='http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css')
+    |     
+    script(type='text/javascript', src='js/codigo_calendario.js')
+    |     
+    link(rel='stylesheet', href='materialize/css/materialize.min.css')
+    |     
+    script(src='js/sweetAlert.js')
+    // Respomsive slider
+    link(href='calendario_lib/css/responsive-calendar.css', rel='stylesheet')
+  |   
+  body
+    if(datos.esAutoridadEducativa === "es admin")
+        // AQUIE SE MOSTRARAN LAS OPCIONES DEL ADMIN
+        include ./includes/opciones_admin_menu.jade
+        |     
+        include ./includes/barra_menu_admin.jade
+        |     
+    else if(datos.esAutoridadEducativa == 'es tutor')
+        include ./includes/barra_menu_tutor.jade
+        |     
+    else if(datos.esAutoridadEducativa == 'es tutorado')
+        include ./includes/barra_menu_tutorado.jade
+        |     
+    .container
+        .col-sm-12.col-lg-12.text-aling.center(style='margin-top:1%; heigth:75%')
+            if(datos.esAutoridadEducativa === "es admin")
+                button#btAgregarCurso.waves-effect.waves-light.btn.grey.lighten-2.black-text(type='button', onclick='ver_avisos()') Ver Avisos
+        
+        // Responsive calendar - START
+        .responsive-calendar.col-sm-12.col-lg-12(style='margin-top:3%')
+            .controls
+                a.pull-left(data-go='prev')
+                    .btn.btn-primary.blue-grey.darken-3 Anterior
+                |             
+                h4.teal-text.darken-4
+                    span(data-head-year='')
+                    |  
+                    span(data-head-month='')
+                    |             
+                a.pull-right(data-go='next')
+                    .btn.btn-primary.blue-grey.darken-3 Siguiente
+            hr
+            |         
+            .day-headers
+                .day.header Lunes
+                |           
+                .day.header Martes
+                |           
+                .day.header Miércoles
+                |           
+                .day.header Jueves
+                |           
+                .day.header Viernes
+                |           
+                .day.header Sábado
+                |           
+                .day.header Domingo
+                |         
+            .days(data-group='days')
+      // Responsive calendar - END
+    |     
+    br
+    br
+    if(avisoSel)
+        script(type='text/javascript').
+            var texto ="#{datos.texto}";
+            texto = texto.split('&lt;br/&gt;').join('<br/>');
+            texto = texto.split('&lt;b&gt;').join('<b>');
+            texto = texto.split('&lt;/b&gt;').join('</b>');
+            swal({title: "#{datos.titulo}", html: texto, type: 'info'});
+    include ./includes/footer.jade
+    |     
+    script(src='calendario_lib/js/jquery.js')
+    |     
+    script(src='bootstrap/js/bootstrap.min.js')
+    |     
+    script(src='calendario_lib/js/responsive-calendar.js')
+    |     
+    script(type='text/javascript').
+        var diaActual = new Date().toISOString().slice(0,10);
+        var dates= "{"+('#{fechas}'.replace(/&quot;/g, '"'))+"}";
+        $(".responsive-calendar").responsiveCalendar({
+            time: diaActual,
+            events: JSON.parse(dates),
+            allRows: false
+        });
+    |     
+    script(type='text/javascript', src='materialize/js/materialize.min.js')
+    |     
+    script(type='text/javascript', src='js/script.js')
