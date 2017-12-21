@@ -37,15 +37,22 @@ var storage = multer.diskStorage({
 })
 var middleware_upload = multer({ storage : storage}).single('foto');
 
-
-
-
 app.get('/', function (req, res) {
 	//res.render('login', {error: true, encontrado: true, userCurp: undefined, user: undefined});
 	db_codigo.pagina_principal(req, res);
 })
 
+app.get('/login', function (req, res) {
+   if (req.session.user) {
+      db_codigo.cursos(req, res);
+   }else{
+      res.render('login', {error: false, titulo: 'Login'});
+   }
+})
 
+app.post('/login', function (req, res) {
+   db_codigo.login(req, res);
+})
 
 //iniiar el servidor en el uerto 8085
 app.listen(port);
