@@ -54,6 +54,21 @@ app.post('/login', function (req, res) {
    db_codigo.login(req, res);
 })
 
+app.get('/recuperar_credenciales', function (req, res) {
+   res.render('pass_olvidado', {Titulo: 'Recuperar Contraseña'});
+})
+
+app.post('/recuperar_credenciales', function (req, res) {
+   db_codigo.recupera_credenciales(req, res);
+})
+
+app.get('/salir', function (req, res) {
+   req.session.destroy(function(){
+      console.log("Usuario finalizo la sesion.")
+   });
+   res.redirect('/');
+})
+
 //iniiar el servidor en el uerto 8085
 app.listen(port);
 console.log("Run Server")
