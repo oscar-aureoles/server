@@ -2,10 +2,10 @@ var mysql = require('mysql');
 
 function conexion(){
    var con = mysql.createConnection({
-      host: "127.0.0.1",
-      user: "root",
-      password: "@dm1nRo0t#",
-      database: "tutorias"
+      host: "us-cdbr-iron-east-05.cleardb.net",
+      user: "b60fee3af52bf8",
+      password: "04af59d6",
+      database: "heroku_a7c9c6c212632b8"      
    });
    return con;
 }

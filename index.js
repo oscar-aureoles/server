@@ -69,6 +69,18 @@ app.get('/salir', function (req, res) {
    res.redirect('/');
 })
 
+app.get('/cursos', function (req, res) {
+   db_codigo.cursos(req, res);
+})
+
+app.get('/admin_usuarios',  function (req, res) {
+   if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
+      db_codigo.admin_usuarios(req, res);
+   }
+})
+
+
+
 //iniiar el servidor en el uerto 8085
 app.listen(port);
 console.log("Run Server")
