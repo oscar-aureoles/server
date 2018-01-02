@@ -9,6 +9,7 @@ db_codigo = require("./js_server/db_codigo.js"),
 multipart = require('connect-multiparty'),
 multer = require('multer'),
 cors = require('cors');
+var mv = require('mv');
 var app = express();
 var curso_id_sel;//almacena el id del curso que se ha seleccionado desde admin_ursos
 var grupo_id_sel;//almacena el id del grupo que se ha seleccionado
@@ -104,25 +105,30 @@ app.post('/nuevo_usuario', function (req, res) {
          if(db_codigo.checkExtension(req.files.foto.name) === false){
             res.send('Formato No Valido');
          }else{
+            db_codigo.insert_nuevo_usuario(req, res);
+            mv(temporalPath, finalPath, function(err) {
+               if (err) { throw err; }
+               console.log('file moved successfully');
+            };
             //guardamos el archivo
-            fs.exists(finalPath, function(exists){
-               //si existe
-               if(exists){
-                  //db_codigo.tarea_tutorado(req, res, 'archivoExiste', null);
-                  res.end();
-               }else{
-                  fs.rename(temporalPath, finalPath, function(error){
-                     if(error){throw error;}else{
-                        db_codigo.insert_nuevo_usuario(req, res);
-                        //db_codigo.tarea_tutorado(req, res, 'success', ruta);
-                     }
-                     // eliminamos el archivo temporal
-                     fs.unlink(temporalPath, function(){
-                        if(error){throw error;}
-                     });
-                  });
-               }
-            });
+            // fs.exists(finalPath, function(exists){
+            //    //si existe
+            //    if(exists){
+            //       //db_codigo.tarea_tutorado(req, res, 'archivoExiste', null);
+            //       res.end();
+            //    }else{
+            //       fs.rename(temporalPath, finalPath, function(error){
+            //          if(error){throw error;}else{
+            //             db_codigo.insert_nuevo_usuario(req, res);
+            //             //db_codigo.tarea_tutorado(req, res, 'success', ruta);
+            //          }
+            //          // eliminamos el archivo temporal
+            //          fs.unlink(temporalPath, function(){
+            //             if(error){throw error;}
+            //          });
+            //       });
+            //    }
+            // });
          }
    }
 })
