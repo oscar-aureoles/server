@@ -652,7 +652,7 @@ function usuario(req, res, usuario_sel, bandera){
          }
       }
    });
-   con.end{timeout: 60000});
+   con.end({timeout: 60000});
 }
 
 module.exports.modificar_usuario = function (req, res){
