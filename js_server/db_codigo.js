@@ -541,32 +541,32 @@ function nuevo_usuario(req, res, guardado, modif, datosUser){
                                                             }
                                                          }
                                                       });
-                                                      con8.end();
+                                                      con8.end({timeout: 60000});
                                                    }
                                                 });
-                                                con7.end();
+                                                con7.end({timeout: 60000});
                                              }
                                           });
-                                          con6.end();
+                                          con6.end({timeout: 60000});
                                        }
                                     });
-                                    con5.end();
+                                    con5.end({timeout: 60000});
                                  }
                               });
-                              con4.end();
+                              con4.end({timeout: 60000});
                            }
                         });
-                        con3.end();
+                        con3.end({timeout: 60000});
                      }
                   });
-                  con2.end();
+                  con2.end({timeout: 60000});
                }
             });
-            con1.end();
+            con1.end({timeout: 60000});
          }
       }    
    });
-   con.end();
+   con.end({timeout: 60000});
 }
 
 module.exports.insert_nuevo_usuario = function (req, res){
@@ -602,14 +602,14 @@ module.exports.insert_nuevo_usuario = function (req, res){
                   }
                }
             });
-            con1.end();
+            con1.end({timeout: 60000});
          }else{
          	nuevo_usuario(req, res, false, false, null);
             //res.render('nuevo_usuario', {error: true});
          }
       }
    });
-   con.end();
+   con.end({timeout: 60000});
 }
 
 function usuario(req, res, usuario_sel, bandera){
@@ -652,7 +652,7 @@ function usuario(req, res, usuario_sel, bandera){
          }
       }
    });
-   con.end();
+   con.end{timeout: 60000});
 }
 
 module.exports.modificar_usuario = function (req, res){
