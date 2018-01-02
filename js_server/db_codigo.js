@@ -381,6 +381,7 @@ function nuevo_usuario(req, res, guardado, modif, datosUser){
       var listaInfo = {};
       if (errorTU) {
          console.log("Error. consulta Nuveo Usuario - Tipo Usuario");
+         res.send('Error - ' + errorTU);
          res.end();
       }else{
          var listaTipoUsuario = [];
@@ -396,6 +397,7 @@ function nuevo_usuario(req, res, guardado, modif, datosUser){
             con1.query("select * from bloque", function(errorB,filasB){
                if (errorB){
                   console.log("Error. consulta Nuveo Usuario - Bloques");
+                  res.send('Error - ' + errorB);
                   res.end();
                }else{
                   var listaBloques = [];
@@ -412,6 +414,7 @@ function nuevo_usuario(req, res, guardado, modif, datosUser){
                   con2.query("select * from categoria", function(errorC,filasC){
                      if (errorC){
                         console.log("Error. consulta Nuveo Usuario - Categoria");
+                        res.send('Error - ' + errorC);
                         res.end();
                      }else{
                         var listaCategorias = [];
@@ -428,6 +431,7 @@ function nuevo_usuario(req, res, guardado, modif, datosUser){
                         con3.query("select * from entidad", function(errorE,filasE){
                            if (errorE){
                               console.log("Error. consulta Nuveo Usuario - Entidad");
+                              res.send('Error - ' + errorE);
                               res.end();
                            }else{
                               var listaEntidades = [];
@@ -444,6 +448,7 @@ function nuevo_usuario(req, res, guardado, modif, datosUser){
                               con4.query("select * from funcion", function(errorF,filasF){
                                  if (errorF){
                                     console.log("Error. consulta Nuveo Usuario - Funcion");
+                                    res.send('Error - ' + errorF);
                                     res.end();
                                  }else{
                                     var listaFunciones = [];
@@ -460,6 +465,7 @@ function nuevo_usuario(req, res, guardado, modif, datosUser){
                                     con5.query("select * from nivel_educativo", function(errorN,filasN){
                                        if (errorN){
                                           console.log("Error. consulta Nuveo Usuario - Nivel Educativo");
+                                          res.send('Error - ' + errorN);
                                           res.end();
                                        }else{
                                           var listaNivelEdu = [];
@@ -476,6 +482,7 @@ function nuevo_usuario(req, res, guardado, modif, datosUser){
                                           con6.query("select * from tipo_examen", function(errorT,filasT){
                                              if (errorT){
                                                 console.log("Error. consulta Nuveo Usuario - Tipo Examen");
+                                                res.send('Error - ' + errorT);
                                                 res.end();
                                              }else{
                                                 var listaTipoExamen = [];
@@ -492,6 +499,7 @@ function nuevo_usuario(req, res, guardado, modif, datosUser){
                                                 con7.query("select * from tipo_sostenimiento", function(errorTS,filasTS){
                                                    if (errorTS){
                                                       console.log("Error. consulta Nuveo Usuario - Tipo Sostenimiento");
+                                                      res.send('Error - ' + errorTS);
                                                       res.end();
                                                    }else{
                                                       var listaTipoSostenimiento = [];
@@ -509,6 +517,7 @@ function nuevo_usuario(req, res, guardado, modif, datosUser){
                                                          var numMensajes = 0;
                                                          if (errorM) {
                                                             console.log('Error - obtener numero de mensajes');
+                                                            res.send('Error - ' + errorM);
                                                             res.end();
                                                          }else{
                                                             if (filasM.length > 0) {
@@ -595,7 +604,8 @@ module.exports.insert_nuevo_usuario = function (req, res){
             });
             con1.end();
          }else{
-            res.render('nuevo_usuario', {error: true});
+         	nuevo_usuario(req, res, false, false, null);
+            //res.render('nuevo_usuario', {error: true});
          }
       }
    });
