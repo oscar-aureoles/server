@@ -575,8 +575,8 @@ module.exports.insert_nuevo_usuario = function (req, res){
    } else{
       fecha_asignacion = new Date(req.body.fecha_asignacion).toLocaleString();
    }
-   var datos = [req.body.curp.toUpperCase(), req.body.nombre.toUpperCase(), req.body.apellido_paterno.toUpperCase(), req.body.apellido_materno.toUpperCase(), 
-      req.body.email, req.body.cct.toUpperCase(), req.body.nivel_educativo, req.body.funcion, req.body.convocatoria_seleccionada, 
+   var datos = [req.body.curp, req.body.nombre, req.body.apellido_paterno, req.body.apellido_materno, 
+      req.body.email, req.body.cct, req.body.nivel_educativo, req.body.funcion, req.body.convocatoria_seleccionada, 
       req.body.tipo_examen, req.body.status_asignacion, fecha_asignacion, req.body.bloque, req.body.entidad, 
       req.body.tipo_sostenimiento, req.body.tipo_usuario, req.body.categoria];
    var sql = "insert into usuario values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
