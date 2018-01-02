@@ -79,6 +79,57 @@ app.get('/admin_usuarios',  function (req, res) {
    }
 })
 
+app.get('/usuario', function (req, res) {
+   if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
+      db_codigo.usuario(req, res, usuario_id_sel, false);
+      usuario_id_sel = undefined;
+   }   
+})
+
+app.get('/nuevo_usuario', function (req, res) {
+   if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
+      db_codigo.nuevo_usuario(req, res, false, false, null);
+   }
+})
+
+app.post('/nuevo_usuario', function (req, res) {
+   if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
+      middleware_upload(req,res,function(err) {
+         db_codigo.insert_nuevo_usuario(req, res);
+         if(err) {
+            console.log('Error al cargar la imagen');
+            return res.end("Error uploading file.");
+         }
+      });
+   }
+   
+})
+
+app.get('/usuario/:usuario_id', function (req, res) {
+   if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
+      usuario_id_sel = req.params.usuario_id;
+      res.redirect("/usuario");
+   }
+})//solicitud de modifiar-visualizar usuario get
+
+app.post('/modificar_usuario', function (req, res){
+   if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
+      middleware_upload(req,res,function(err) {
+         db_codigo.modificar_usuario(req, res);
+         if(err) {
+            console.log('Error al cargar la imagen');
+            return res.end("Error uploading file.");
+         }
+      });
+   }
+})
+
+app.get('/admin_cursos',  function (req, res) {//solicitud de admin ursos get
+   if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
+      db_codigo.admin_cursos(req, res);
+   }
+})
+
 
 
 //iniiar el servidor en el uerto 8085
