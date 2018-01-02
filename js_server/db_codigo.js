@@ -7,6 +7,7 @@ function conexion(){
       password: "04af59d6",
       database: "heroku_a7c9c6c212632b8"      
    });
+   return con;
 }
 
 module.exports.login = function (req, res){
