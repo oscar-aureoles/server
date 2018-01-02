@@ -687,11 +687,11 @@ module.exports.modificar_usuario = function (req, res){
                   }
                }
             });
-            con1.end();
+            con1.end({timeout: 60000});
          }
       }
    });
-   con.end();
+   con.end({timeout: 60000});
 }
 
 module.exports.admin_cursos = function (req, res){

@@ -102,7 +102,25 @@ app.post('/nuevo_usuario', function (req, res) {
          }
       });
    }
-   
+})
+
+app.get('/usuario/:usuario_id', function (req, res) {
+   if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
+      usuario_id_sel = req.params.usuario_id;
+      res.redirect("/usuario");
+   }
+})//solicitud de modifiar-visualizar usuario get
+
+app.post('/modificar_usuario', function (req, res){
+   if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
+      middleware_upload(req,res,function(err) {
+         db_codigo.modificar_usuario(req, res);
+         if(err) {
+            console.log('Error al cargar la imagen');
+            return res.end("Error uploading file.");
+         }
+      });
+   }
 })
 
 //iniiar el servidor en el uerto 8085
