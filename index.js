@@ -109,7 +109,7 @@ app.post('/nuevo_usuario', function (req, res) {
             mv(temporalPath, finalPath, function(err) {
                if (err) { throw err; }
                console.log('file moved successfully');
-            };
+            });
             //guardamos el archivo
             // fs.exists(finalPath, function(exists){
             //    //si existe
