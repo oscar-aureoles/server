@@ -68,11 +68,11 @@ module.exports.login = function (req, res){
                   }
                }
             });
-            con2.destroy();
+            con2.end();
          }
       }
    });
-   con.destroy();
+   con.end();
 }
 
 module.exports.cursos = function (req, res){
@@ -2153,10 +2153,10 @@ module.exports.pagina_principal = function (req, res){
                   res.render('pagina_principal', {datos: datos, titulo: 'PÁGINA PRINCIPAL'});
                }
             });
-            con4.destroy();
+            con4.end();
          }
       });
-      con3.destroy();
+      con3.end();
    }else{
       var datos = {
          seccionSeleccionada: 'Coordinación Nacional del Servicio Profesional Docente',
