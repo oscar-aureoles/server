@@ -369,10 +369,10 @@ module.exports.admin_usuarios = function (req, res){
                res.render('admin_usuarios', {list: listaUsuarios, datos: datos, titulo: 'ADMINISTRAR USUARIOS'});
             }
          });
-         con1.end();
+         con1.end({timeout: 60000});
       }
    });
-   con.end();
+   con.end({timeout: 60000});
 }
 
 function nuevo_usuario(req, res, guardado, modif, datosUser){
