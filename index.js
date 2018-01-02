@@ -94,7 +94,36 @@ app.get('/nuevo_usuario', function (req, res) {
 
 app.post('/nuevo_usuario', function (req, res) {
    if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
-      db_codigo.insert_nuevo_usuario(req, res, middleware_upload);
+      var ruta = 'asset/asset_fotoPerfilUsers/' + req.body.curp + db_codigo.getFirstFileName2(req.files.foto.name);;
+         //ruta temporal, puede ser algo así C:\Users\User\AppData\Local\Temp\7056-12616ij.png
+         var temporalPath = req.files.foto.path;
+         //ruta final donde alojaremos el archivo, le cambiamos el nombre para que 
+         //sea estilo imagen-4365436.extension
+         var finalPath = './public/asset/asset_fotoPerfilUsers/' + req.body.curp + db_codigo.getFirstFileName2(req.files.foto.name);
+         //si la extension no está permitida salimos con un mensaje
+         if(db_codigo.checkExtension(req.files.foto.name) === false){
+            res.send('Formato No Valido');
+         }else{
+            //guardamos el archivo
+            fs.exists(finalPath, function(exists){
+               //si existe
+               if(exists){
+                  //db_codigo.tarea_tutorado(req, res, 'archivoExiste', null);
+                  res.end();
+               }else{
+                  fs.rename(temporalPath, finalPath, function(error){
+                     if(error){throw error;}else{
+                        db_codigo.insert_nuevo_usuario(req, res);
+                        //db_codigo.tarea_tutorado(req, res, 'success', ruta);
+                     }
+                     // eliminamos el archivo temporal
+                     fs.unlink(temporalPath, function(){
+                        if(error){throw error;}
+                     });
+                  });
+               }
+            });
+         }
    }
 })
 

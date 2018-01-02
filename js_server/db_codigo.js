@@ -600,12 +600,7 @@ module.exports.insert_nuevo_usuario = function (req, res, middleware_upload){
                   }else{
                      nuevo_usuario(req, res, false, false, null);
                   }
-                     middleware_upload(req,res,function(err) {
-                        if(err) {
-                           console.log('Error al cargar la imagen');
-                           return res.end("Error uploading file.");
-                        }
-                     });
+                     
                }
             });
             con1.end({timeout: 60000});
@@ -1877,6 +1872,10 @@ function in_array(needle, haystack){
 //crea un nombre para la imagen a subir
 module.exports.getFirstFileName = function (file){
    return getFileName(file)+"."+getExtension(file);
+}
+
+module.exports.getFirstFileName2 = function (file){
+   return "."+getExtension(file);
 }
 
 //obtenemos el nombre de la imagen
