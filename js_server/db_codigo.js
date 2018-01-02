@@ -7,7 +7,6 @@ function conexion(){
       password: "04af59d6",
       database: "heroku_a7c9c6c212632b8"      
    });
-   return con;
 }
 
 module.exports.login = function (req, res){
@@ -68,11 +67,11 @@ module.exports.login = function (req, res){
                   }
                }
             });
-            con2.end();
+            con2.destroy();
          }
       }
    });
-   con.end();
+   con.destroy();
 }
 
 module.exports.cursos = function (req, res){
@@ -2153,10 +2152,10 @@ module.exports.pagina_principal = function (req, res){
                   res.render('pagina_principal', {datos: datos, titulo: 'PÁGINA PRINCIPAL'});
                }
             });
-            con4.end();
+            con4.destroy();
          }
       });
-      con3.end();
+      con3.destroy();
    }else{
       var datos = {
          seccionSeleccionada: 'Coordinación Nacional del Servicio Profesional Docente',
