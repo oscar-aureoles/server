@@ -94,13 +94,7 @@ app.get('/nuevo_usuario', function (req, res) {
 
 app.post('/nuevo_usuario', function (req, res) {
    if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
-      middleware_upload(req,res,function(err) {
-         db_codigo.insert_nuevo_usuario(req, res);
-         if(err) {
-            console.log('Error al cargar la imagen');
-            return res.end("Error uploading file.");
-         }
-      });
+      db_codigo.insert_nuevo_usuario(req, res, middleware_upload);
    }
 })
 
