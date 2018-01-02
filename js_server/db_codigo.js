@@ -575,6 +575,7 @@ module.exports.insert_nuevo_usuario = function (req, res){
    } else{
       fecha_asignacion = new Date(req.body.fecha_asignacion).toLocaleString();
    }
+   console.log("Cur " + req.body.curp);
    var datos = [req.body.curp, req.body.nombre, req.body.apellido_paterno, req.body.apellido_materno, 
       req.body.email, req.body.cct, req.body.nivel_educativo, req.body.funcion, req.body.convocatoria_seleccionada, 
       req.body.tipo_examen, req.body.status_asignacion, fecha_asignacion, req.body.bloque, req.body.entidad, 
