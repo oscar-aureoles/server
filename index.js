@@ -209,6 +209,43 @@ app.get('/curso', function (req, res) {
    }   
 })
 
+app.post('/modificar_curso', function (req, res) {
+   if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
+      db_codigo.modificar_curso(req, res);
+      modif = 'modifDatosCurso';
+      curso_id_sel = req.body.idCursoSel;
+      res.redirect("/curso");
+   }
+})
+
+app.post('/modificar_sesiones', function (req, res) {
+   if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
+      db_codigo.modificar_fechas_sesiones(req, res);
+      modif = 'modifSesiones';
+      curso_id_sel = req.body.idCursoSesiones;
+      res.redirect("/curso");
+   }
+})
+
+app.get('/nuevo_grupo/curso/:idC', function (req, res){
+   if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
+      cursoID = req.params.idC;
+      res.redirect('/nuevo_grupo');
+   } 
+})
+
+app.get('/nuevo_grupo', function (req, res){
+   if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
+      db_codigo.nuevo_grupo(req, res, cursoID, false);
+   } 
+})
+
+app.post('/nuevo_grupo', function (req, res){
+   if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
+      db_codigo.insert_nuevo_grupo(req, res);
+   } 
+})
+
 //iniiar el servidor en el uerto 8085
 app.listen(port);
 console.log("Run Server")
