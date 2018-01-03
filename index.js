@@ -179,6 +179,36 @@ app.get('/nuevo_curso', function (req, res) {
    }
 })
 
+app.post('/nuevo_curso', function (req, res) {
+   if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
+      db_codigo.insert_nuevo_curso(req, res);
+   }
+})
+
+app.get('/curso/:curso_id', function (req, res) {
+   if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
+      curso_id_sel = req.params.curso_id;
+      res.redirect("/curso");
+   }
+})
+
+app.get('/curso', function (req, res) {
+   if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
+      if (modif === 'modifSesiones') {
+         db_codigo.curso(req, res, curso_id_sel, grupo_id_sel, 'true');
+      }else if (modif === 'TutoradosAgregados') {
+         db_codigo.curso(req, res, curso_id_sel, grupo_id_sel, 'tutoradosAgregados');
+      }else if(modif === 'modifDatosCurso'){
+         db_codigo.curso(req, res, curso_id_sel, grupo_id_sel, 'modifDatosCurso');
+      }else{
+         db_codigo.curso(req, res, curso_id_sel, grupo_id_sel, 'false');
+      }
+      grupo_id_sel = undefined;
+      curso_id_sel = undefined;
+      modif = '';
+   }   
+})
+
 //iniiar el servidor en el uerto 8085
 app.listen(port);
 console.log("Run Server")
