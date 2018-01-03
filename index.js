@@ -167,6 +167,18 @@ app.post('/modificar_usuario', function (req, res){
    }
 })
 
+app.get('/admin_cursos',  function (req, res) {//solicitud de admin ursos get
+   if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
+      db_codigo.admin_cursos(req, res);
+   }
+})
+
+app.get('/nuevo_curso', function (req, res) {
+   if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
+      db_codigo.nuevo_curso(req, res, false);
+   }
+})
+
 //iniiar el servidor en el uerto 8085
 app.listen(port);
 console.log("Run Server")

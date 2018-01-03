@@ -780,7 +780,7 @@ module.exports.admin_cursos = function (req, res){
             con3.query('select count(id) as num_mensajes from mensaje where status_leido = ? and destinatario = ?',[0, req.session.user.curp], function(errorMe, filasMe){
                var numMensajes = 0;
                if (errorMe) {
-                  console.log('Error - obtener numero de mensajes');
+                  console.log('Error - obtener numero de mensajes ' + errorMe);
                   res.end();
                }else{
                   if (filasMe.length > 0) {
@@ -808,7 +808,7 @@ function nuevo_curso(req, res, guardado){
    con3.query('select count(id) as num_mensajes from mensaje where status_leido = ? and destinatario = ?',[0, req.session.user.curp], function(errorMe, filasMe){
       var numMensajes = 0;
       if (errorMe) {
-         console.log('Error - obtener numero de mensajes');
+         console.log('Error - obtener numero de mensajes ' + errorMe);
          res.end();
       }else{
          if (filasMe.length > 0) {
