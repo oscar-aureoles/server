@@ -1153,7 +1153,7 @@ module.exports.calendario = function (req, res, id_aviso){
             numMensajes = filasMe[0].num_mensajes;
          }
          var con3 = conexion();
-          con3.query('select * from aviso where date(fecha)>=CURDATE() and id_tipo_aviso = 2', function(errorAv, filasAv){
+          con3.query('select * from aviso where date(fecha)>=CURDATE() and id_tipo_aviso = 11', function(errorAv, filasAv){
             var listaAvisos = new Array();
             if (errorAv) {
                console.log('Error - obtener numero de mensajes ' + errorAv);
@@ -1246,7 +1246,7 @@ module.exports.ver_avisos = function (req, res){
             numMensajes = filasMe[0].num_mensajes;
          }
          var con3 = conexion();
-          con3.query('select id, nombre_aviso, DATE_FORMAT(fecha, \'%d-%m-%Y\') as fecha, descripcion from aviso where date(fecha)>=CURDATE() and id_tipo_aviso = 2', function(errorAv, filasAv){
+          con3.query('select id, nombre_aviso, DATE_FORMAT(fecha, \'%d-%m-%Y\') as fecha, descripcion from aviso where date(fecha)>=CURDATE() and id_tipo_aviso = 11', function(errorAv, filasAv){
             var listaAvisos = new Array();
             if (errorAv) {
                console.log('Error - obtener lista de avisos ' + errorAv);
