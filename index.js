@@ -142,13 +142,22 @@ app.get('/usuario/:usuario_id', function (req, res) {
 
 app.post('/modificar_usuario', function (req, res){
    if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
-      middleware_upload(req,res,function(err) {
-         db_codigo.modificar_usuario(req, res);
-         if(err) {
-            console.log('Error al cargar la imagen');
-            return res.end("Error uploading file.");
+      var ruta = 'asset/asset_fotoPerfilUsers/' + req.body.curp + db_codigo.getFirstFileName2(req.files.foto.name);;
+         //ruta temporal, puede ser algo así C:\Users\User\AppData\Local\Temp\7056-12616ij.png
+         var temporalPath = req.files.foto.path;
+         //ruta final donde alojaremos el archivo, le cambiamos el nombre para que 
+         //sea estilo imagen-4365436.extension
+         var finalPath = './public/asset/asset_fotoPerfilUsers/' + req.body.curp + db_codigo.getFirstFileName2(req.files.foto.name);
+         //si la extension no está permitida salimos con un mensaje
+         if(db_codigo.checkExtension(req.files.foto.name) === false){
+            res.send('Formato No Valido');
+         }else{
+            db_codigo.modificar_usuario(req, res);
+            mv(temporalPath, finalPath, function(err) {
+               if (err) { throw err; }
+               console.log('file moved successfully');
+            });
          }
-      });
    }
 })
 
