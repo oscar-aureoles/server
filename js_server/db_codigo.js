@@ -2128,7 +2128,7 @@ module.exports.pagina_principal = function (req, res){
             }
             var avisoActual = false;
             var con4 = conexion();
-            con4.query('select id, nombre_aviso, descripcion, DATE_FORMAT(fecha, \'%d-%m-%Y\') as fecha from aviso where fecha = CURDATE() and id_tipo_aviso = 2', function(errorAc, filasAc){
+            con4.query('select id, nombre_aviso, descripcion, DATE_FORMAT(fecha, \'%d-%m-%Y\') as fecha from aviso where fecha = CURDATE() and id_tipo_aviso = 11', function(errorAc, filasAc){
                if (errorAc) {
                   console.log('Error - obtener aviso actual ' + errorAc);
                   res.end();
