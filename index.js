@@ -305,6 +305,225 @@ app.get('/eliminar_aviso/:id', function (req, res) {
    }
 })
 
+app.get('/aviso/:id', function (req, res) {
+   if (req.session.user) {
+      id_aviso = req.params.id;
+      res.redirect('/calendario');
+   }else{
+      res.redirect('/login');
+   }
+})
+
+app.get('/avisos', function (req, res) {
+   if (req.session.user) {
+      db_codigo.avisos(req, res);
+   }else{
+      res.redirect('/login');
+   }
+})
+
+app.get('/mi_curso/:id', function (req, res) {
+    if (req.session.user) {
+        if (req.session.user.tipo_usuario === 'Tutor' | req.session.user.tipo_usuario === 'Tutorado') {
+         req.session.user.subir_tareaID = undefined;
+         req.session.user.ver_tareaID = undefined;
+            if (req.session.user.actividadActualiza === undefined) {
+               db_codigo.mi_curso(req, res, undefined, undefined);
+            }else{
+               db_codigo.mi_curso(req, res, req.session.user.actividadActualiza, req.session.user.sesionActividadActualiza);
+            }
+        }else{
+         res.redirect('/login');
+        }
+    }else{
+      res.redirect('/login');
+    }
+})//solicitud de visualizar contenido del curso tutorado-turor get
+
+app.get('/actualizarActividad/:idCurso/id_actividad/:idActividad/id_sesion/:idSesion', function (req, res) {
+   if (req.session.user) {
+      if (req.session.user.tipo_usuario === 'Tutor' | req.session.user.tipo_usuario === 'Tutorado') {
+
+         db_codigo.actualizarStatusActividad(req, res);
+      }else{
+         res.redirect('/login');
+      }
+   }else{
+      res.redirect('/login');
+   }
+})
+
+app.get('/mensajes', function (req, res) {
+   if (req.session.user) {
+      db_codigo.mensajes(req, res);
+   }else{
+      res.redirect('/login');
+   }
+})
+
+app.get('/mensajes/:curp', function (req, res) {
+   if (req.session.user) {
+      req.session.user.curp_mensaje = req.params.curp;
+      db_codigo.verMensajeLeido(req, res);
+   }
+})
+
+app.post('/nueva_actividad', function (req, res) {
+   if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
+      db_codigo.nueva_actividad(req, res, id_curso_contenidoCurso);
+      if (id_curso_contenidoCurso != undefined) {
+         res.redirect('/contenido_curso/'+id_curso_contenidoCurso);
+      }else{
+         res.redirect('/login');
+      }
+   }
+})
+
+//modulos en desarrollo
+app.get('/reportes', function (req, res) {
+   if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
+      db_codigo.reportes(req, res);
+   }
+})
+
+app.get('/reportes/cursoID/:idC', function (req, res) {
+   if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
+      req.session.user.reportesIdCurso = req.params.idC;
+      req.session.user.reportesIdGrupo = undefined;
+      req.session.user.reportesIdSesion = undefined;
+      res.redirect('/reportes');
+   }
+})
+
+app.get('/reportes/grupoID/:idG', function (req, res) {
+   if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
+      req.session.user.reportesIdGrupo = req.params.idG;
+      res.redirect('/reportes');
+   }
+})
+
+app.get('/reportes/sesionID/:idS', function (req, res) {
+   if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
+      req.session.user.reportesIdSesion = req.params.idS;
+      res.redirect('/reportes');
+   }
+})
+
+//modulo en desarrollo
+app.get('/subir_tarea/:id', function (req, res) {
+   if (req.session.user) {
+      if (req.session.user.tipo_usuario === 'Tutorado') {
+         req.session.user.subir_tareaID = req.params.id;
+         res.redirect('/subir_tarea');
+      }else{
+         res.redirect('/login');
+      }
+   }else{
+      res.redirect('/login');
+   }
+})
+
+app.get('/subir_tarea', function (req, res) {
+   if (req.session.user) {
+      if (req.session.user.tipo_usuario === 'Tutorado') {
+         if (req.session.user.subir_tareaID != undefined) {
+            db_codigo.tarea_tutorado(req, res, 'false', null);
+         }else{
+            res.redirect('/login');
+         }        
+      }else{
+         res.redirect('/login');
+      }
+   }else{
+      res.redirect('/login');
+   }
+})
+
+app.post('/subir_tarea', function (req, res) {
+   if (req.session.user) {
+      if (req.session.user.tipo_usuario === 'Tutorado') {
+         var ruta = 'archivos/tareas/' + db_codigo.getFirstFileName(req.files.archivo.name);;
+         //ruta temporal, puede ser algo así C:\Users\User\AppData\Local\Temp\7056-12616ij.png
+         var temporalPath = req.files.archivo.path;
+         //ruta final donde alojaremos el archivo, le cambiamos el nombre para que 
+         //sea estilo imagen-4365436.extension
+         var finalPath = './public/archivos/tareas/' + db_codigo.getFirstFileName(req.files.archivo.name);
+         //si la extension no está permitida salimos con un mensaje
+         if(db_codigo.checkExtension(req.files.archivo.name) === false){
+            db_codigo.tarea_tutorado(req, res, 'formatoInvalido', null);
+         }else{
+            //guardamos el archivo
+            fs.exists(finalPath, function(exists){
+               //si existe
+               if(exists){
+                  db_codigo.tarea_tutorado(req, res, 'archivoExiste', null);
+               }else{
+                  fs.rename(temporalPath, finalPath, function(error){
+                     if(error){throw error;}else{
+                        db_codigo.tarea_tutorado(req, res, 'success', ruta);
+                     }
+                     // eliminamos el archivo temporal
+                     fs.unlink(temporalPath, function(){
+                        if(error){throw error;}
+                     });
+                  });
+               }
+            });
+         }
+      }else{
+         res.redirect('/login');
+      }
+   }else{
+      res.redirect('/login');
+   }
+})
+
+app.get('/ver_tarea/:id', function (req, res) {
+   if (req.session.user) {
+      if (req.session.user.tipo_usuario === 'Tutor') {
+         req.session.user.ver_tareaID = req.params.id;
+         res.redirect('/ver_tarea');
+      }else{
+         res.redirect('/login');
+      }
+   }else{
+      res.redirect('/login');
+   }
+})
+
+app.get('/ver_tarea', function (req, res) {
+   if (req.session.user) {
+      if (req.session.user.tipo_usuario === 'Tutor') {
+         if (req.session.user.ver_tareaID != undefined) {
+            db_codigo.tarea_tutor(req, res, 'false', null);
+         }else{
+            res.redirect('/login');
+         }        
+      }else{
+         res.redirect('/login');
+      }
+   }else{
+      res.redirect('/login');
+   }
+})
+
+app.get('/tutor_tarea/:id', function (req, res) {
+   if (req.session.user) {
+      if (req.session.user.tipo_usuario === 'Tutor') {
+         if (req.session.user.ver_tareaID != undefined) {
+            db_codigo.actualizarStatusTareaTutor(req);
+            res.redirect('/mi_curso/' + req.params.id);
+         }else{
+            res.redirect('/login');
+         }        
+      }else{
+         res.redirect('/login');
+      }
+   }else{
+      res.redirect('/login');
+   }
+})
+
 //iniiar el servidor en el uerto 8085
 app.listen(port);
 console.log("Run Server")
