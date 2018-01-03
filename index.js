@@ -246,6 +246,65 @@ app.post('/nuevo_grupo', function (req, res){
    } 
 })
 
+app.get('/grupo/:id/cursoID/:idC', function (req, res){
+   if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
+      grupo_id_sel = req.params.id;
+      curso_id_sel = req.params.idC;
+      res.redirect("/curso");
+   }
+})//solicitud de visualizar miembros del grupo get
+
+app.get('/grupo_usuario/:id_tutorados/grupoID/:idG/cursoID/:idC', function (req, res) {
+   if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
+      db_codigo.insert_usuario_grupo(res, req.params.id_tutorados, req.params.idG);
+      curso_id_sel = req.params.idC;
+      modif = 'TutoradosAgregados';
+      res.redirect("/curso");
+   }
+})//solicitud de agregar tutorados a un grupo get
+
+app.get('/contenido_curso/:id', function (req, res) {
+   if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
+      db_codigo.contenido_curso(req, res);
+      id_curso_contenidoCurso = req.params.id;
+   }
+})//solicitud de visualizar contenido del curso admin get
+
+app.post('/nuevo_mensaje', function (req, res) {
+   if (req.session.user) {
+      db_codigo.nuevo_mensaje(req, res);
+   }else{
+      res.redirect('/login');
+   }
+})
+
+app.get('/calendario', function (req, res) {
+   if (req.session.user) {
+      db_codigo.calendario(req, res, id_aviso);
+      id_aviso = undefined;
+   }else{
+      res.redirect('/login');
+   }
+})
+
+app.get('/ver_avisos', function (req, res) {
+   if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
+      db_codigo.ver_avisos(req, res);
+   }
+})
+
+app.post('/nuevo_aviso', function (req, res) {
+   if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
+      db_codigo.nuevo_aviso(req, res);
+   }
+})
+
+app.get('/eliminar_aviso/:id', function (req, res) {
+   if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
+      db_codigo.eliminar_aviso(req, res);
+   }
+})
+
 //iniiar el servidor en el uerto 8085
 app.listen(port);
 console.log("Run Server")
