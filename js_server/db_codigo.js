@@ -149,14 +149,14 @@ module.exports.cursos = function (req, res){
                            res.render('admin_principal', {CursosActuales: listaCursosActuales, CursosPasados: listaCursosPasados, datos: datos, titulo: 'CURSOS'});
                         }
                      });
-                     con4.end();
+                     con4.end({timeout: 60000});
                   }
                });
-               con3.end();
+               con3.end({timeout: 60000});
             });
-            con2.end();
+            con2.end({timeout: 60000});
          });
-         con.end();
+         con.end({timeout: 60000});
        }else if (req.session.user.tipo_usuario === 'Tutor') {
          //obtenemos los cursos actuales y pasados
          var listaCursosActuales = new Array(), listaCursosPasados = new Array();
@@ -226,15 +226,15 @@ module.exports.cursos = function (req, res){
                               res.render('tutor_principal', {CursosActuales: listaCursosActuales, CursosPasados: listaCursosPasados, datos: datos, titulo: 'CURSOS'});
                            }
                         });
-                        con4.end();
+                        con4.end({timeout: 60000});
                      }
                   });
-                  con3.end();
+                  con3.end({timeout: 60000});
                }
             });
-            con2.end();
+            con2.end({timeout: 60000});
          });
-         con.end();
+         con.end({timeout: 60000});
        }else if (req.session.user.tipo_usuario === 'Tutorado') {
          //obtenemos los cursos actuales y pasados
          var listaCursosActuales = new Array(), listaCursosPasados = new Array();
@@ -304,15 +304,15 @@ module.exports.cursos = function (req, res){
                               res.render('tutorado_principal', {CursosActuales: listaCursosActuales, CursosPasados: listaCursosPasados, datos: datos, titulo: 'CURSOS'});
                            }
                         });
-                        con4.end();
+                        con4.end({timeout: 60000});
                      }
                   });
-                  con3.end();
+                  con3.end({timeout: 60000});
                }
             });
-            con2.end();
+            con2.end({timeout: 60000});
          });
-         con.end();
+         con.end({timeout: 60000});
        }else{
            res.render('login', {error: false});
        }
@@ -791,13 +791,13 @@ module.exports.admin_cursos = function (req, res){
                   res.render('admin_cursos', {list: listaCursos, titulo: 'ADMINISTRAR CURSOS', datos: datos});
                }
             });
-            con3.end();
+            con3.end({timeout: 60000});
          });
-         con2.end();
+         con2.end({timeout: 60000});
       });
-      con1.end();
+      con1.end({timeout: 60000});
    });
-   con.end();
+   con.end({timeout: 60000});
 }
 
 function nuevo_curso(req, res, guardado){
@@ -823,7 +823,7 @@ function nuevo_curso(req, res, guardado){
          }
       }
    });
-   con3.end();
+   con3.end({timeout: 60000});
 }
 
 module.exports.insert_nuevo_curso = function (req, res){
@@ -843,13 +843,13 @@ module.exports.insert_nuevo_curso = function (req, res){
                      console.log("Error. " + errorS);
                   }
                });
-               con2.end();
+               con2.end({timeout: 60000});
             }
          }
          nuevo_curso(req, res, true);
       }
    });
-   con.end();
+   con.end({timeout: 60000});
 }
 
 function curso(req, res, curso_sel, grupo_sel, opcion){
@@ -972,26 +972,26 @@ function curso(req, res, curso_sel, grupo_sel, opcion){
                                              }
                                           }
                                        });
-                                       con5.end();
+                                       con5.end({timeout: 60000});
                                     }
                                  }
                               });
-                              con5.end();
+                              con5.end({timeout: 60000});
                            }
                         });
-                        con4.end();
+                        con4.end({timeout: 60000});
                      }
                   });
-                  con3.end();
+                  con3.end({timeout: 60000});
                }
             });
-            con1.end();
+            con1.end({timeout: 60000});
          }else{
             res.redirect("/admin_cursos");
          }
       }
    });
-   con.end();
+   con.end({timeout: 60000});
 }
 
 module.exports.modificar_curso = function (req, res){
@@ -1003,7 +1003,7 @@ module.exports.modificar_curso = function (req, res){
          res.end();
       }
    });
-   con.end();
+   con.end({timeout: 60000});
 }
 
 module.exports.modificar_fechas_sesiones = function (req, res){
@@ -1017,7 +1017,7 @@ module.exports.modificar_fechas_sesiones = function (req, res){
                res.end();
             }
          });
-         con.end();
+         con.end({timeout: 60000});
       }
       if (req.body['fecha_finN'+ids[i]] != '') {
          var con = conexion();
@@ -1027,7 +1027,7 @@ module.exports.modificar_fechas_sesiones = function (req, res){
                res.end();
             }
          });
-         con.end();
+         con.end({timeout: 60000});
       }
       if (req.body['nombre_sesion'+ids[i]] != '') {
          var con = conexion();
@@ -1037,7 +1037,7 @@ module.exports.modificar_fechas_sesiones = function (req, res){
                res.end();
             }
          });
-         con.end();
+         con.end({timeout: 60000});
       }
    }
 }
@@ -1082,10 +1082,10 @@ function nuevo_grupo(req, res, cursoID, guardado){
                }
             }
          });
-         con3.end();
+         con3.end({timeout: 60000});
       }
    });
-   con.end();
+   con.end({timeout: 60000});
 }
 
 module.exports.insert_nuevo_grupo = function (req, res){
@@ -1106,11 +1106,11 @@ module.exports.insert_nuevo_grupo = function (req, res){
                   nuevo_grupo(req, res, req.body.id_curso, false);
                }
             });
-            con1.end();
+            con1.end({timeout: 60000});
          } 
       }
    });
-   con.end();
+   con.end({timeout: 60000});
 }
 
 module.exports.insert_usuario_grupo = function (res, id_tutorados, grupoID){
@@ -1126,7 +1126,7 @@ module.exports.insert_usuario_grupo = function (res, id_tutorados, grupoID){
             res.end();
          }
       });
-      con.end();
+      con.end({timeout: 60000});
       con = conexion();
       con.query('update usuario set status_asignacion = 1 where curp = ?', [id_atual], function (errorU, filasU){
          if (errorU) {
@@ -1134,7 +1134,7 @@ module.exports.insert_usuario_grupo = function (res, id_tutorados, grupoID){
             res.end();
          }
       });
-      con.end();
+      con.end({timeout: 60000});
    }
 }
 
@@ -1204,17 +1204,17 @@ module.exports.calendario = function (req, res, id_aviso){
                         res.render('calendario', {titulo: 'CALENDARIO', datos: datos, listaAvisos: listaAvisos, fechas: strr, avisoSel: true});
                      }
                   });
-                  con4.end();
+                  con4.end({timeout: 60000});
                }else{
                   res.render('calendario', {titulo: 'CALENDARIO', datos: datos, listaAvisos: listaAvisos, fechas: strr, avisoSel: false});
                }
                
             }
           });
-          con3.end();
+          con3.end({timeout: 60000});
       }
    });
-   con2.end();
+   con2.end({timeout: 60000});
 }
 
 module.exports.eliminar_aviso = function (req, res){
@@ -1227,7 +1227,7 @@ module.exports.eliminar_aviso = function (req, res){
          res.end();
       }
    });
-   con.end();
+   con.end({timeout: 60000});
    res.redirect('/ver_avisos');
 }
 
@@ -1266,10 +1266,10 @@ module.exports.ver_avisos = function (req, res){
                res.render('ver_avisos', {titulo: 'VER AVISOS', datos: datos, listaAvisos: listaAvisos});
             }
           });
-          con3.end();
+          con3.end({timeout: 60000});
       }
    });
-   con2.end();
+   con2.end({timeout: 60000});
 }
 
 module.exports.nuevo_aviso = function (req, res){
@@ -1285,7 +1285,7 @@ module.exports.nuevo_aviso = function (req, res){
          } 
       }
    });
-   con.end();
+   con.end({timeout: 60000});
 }
 
 module.exports.avisos = function (req, res){
@@ -1336,10 +1336,10 @@ module.exports.avisos = function (req, res){
                res.render('avisos', {titulo: 'AVISOS', datos: datos, listaAvisos: listaAvisos});
             }
          });
-         con3.end();
+         con3.end({timeout: 60000});
       }
    });
-   con2.end();
+   con2.end({timeout: 60000});
 }
 
 module.exports.contenido_curso = function (req, res){
@@ -1424,15 +1424,15 @@ module.exports.contenido_curso = function (req, res){
                         res.render('contenido_curso', {sesiones: sesiones, nombre_curso: filas[0].nombre_curso, tipo_actividades: tipo_actividades, titulo: 'CURSO: ' + filas[0].nombre_curso, datos: datos});
                      }
                   });
-                  con3.end();
+                  con3.end({timeout: 60000});
                }
             });
-            con2.end();
+            con2.end({timeout: 60000});
          }
       });
-      con1.end();
+      con1.end({timeout: 60000});
    });
-   con.end();
+   con.end({timeout: 60000});
 }
 
 function mi_curso(req, res, id_actividad, id_sesion){
@@ -1520,12 +1520,12 @@ function mi_curso(req, res, id_actividad, id_sesion){
                   res.render('mi_curso', {sesiones: sesiones, titulo: titulo, datos: datos});
                }
             });
-            con2.end();            
+            con2.end({timeout: 60000});            
          }
       });
-      con1.end();
+      con1.end({timeout: 60000});
    });
-   con.end();
+   con.end({timeout: 60000});
 }
 
 module.exports.actualizarStatusActividad = function (req, res){
@@ -1541,7 +1541,7 @@ module.exports.actualizarStatusActividad = function (req, res){
          res.redirect('/mi_curso/' + req.params.idCurso);
       }
    });
-   con.end();
+   con.end({timeout: 60000});
 }
 
 module.exports.mensajes = function (req, res, curp_mensaje){
@@ -1648,7 +1648,7 @@ module.exports.mensajes = function (req, res, curp_mensaje){
                               }
                            }
                         });
-                        con4.end();
+                        con4.end({timeout: 60000});
                      }else{
                         var datos = {
                            seccionSeleccionada: 'Mensajes', 
@@ -1661,10 +1661,10 @@ module.exports.mensajes = function (req, res, curp_mensaje){
                      }
                }
             });
-            con3.end();
+            con3.end({timeout: 60000});
       }
    });
-   con2.end();
+   con2.end({timeout: 60000});
 }
 
 module.exports.verMensajeLeido = function (req, res){
@@ -1679,7 +1679,7 @@ module.exports.verMensajeLeido = function (req, res){
          res.redirect('/mensajes');
       }
    });
-   con.end();
+   con.end({timeout: 60000});
 }
 
 module.exports.nuevo_mensaje = function (req, res){
@@ -1696,7 +1696,7 @@ module.exports.nuevo_mensaje = function (req, res){
          res.redirect('/mensajes');
       }
    });
-   con.end();
+   con.end({timeout: 60000});
 }
 
 module.exports.nueva_actividad = function (req, res, id_curso_contenidoCurso){
@@ -1734,12 +1734,12 @@ module.exports.nueva_actividad = function (req, res, id_curso_contenidoCurso){
                         res.end();
                      }
                   });
-                  conT.end();
+                  conT.end({timeout: 60000});
                }
                
             }
          });
-         con1.end();
+         con1.end({timeout: 60000});
          var con2 = conexion();
          con2.query('select * from grupo join grupo_usuario on grupo.id = id_grupo where id_curso = ?', [id_curso_contenidoCurso], function(errorOTu, filasOTu){
             if (errorOTu) {
@@ -1754,14 +1754,14 @@ module.exports.nueva_actividad = function (req, res, id_curso_contenidoCurso){
                         res.end();
                      }
                   });
-                  conT.end();
+                  conT.end({timeout: 60000});
                }
             }
          });
-         con2.end();
+         con2.end({timeout: 60000});
       }
    });
-   con.end();
+   con.end({timeout: 60000});
 }
 
 module.exports.eliminar_actividad = function (req, res){
@@ -1772,7 +1772,7 @@ module.exports.eliminar_actividad = function (req, res){
          res.end();
       }
    });
-   con.end();
+   con.end({timeout: 60000});
 
    var con1 = conexion();
    con1.query('delete from actividad where id = ?', [req.params.id], function(error, filas){
@@ -1783,7 +1783,7 @@ module.exports.eliminar_actividad = function (req, res){
          res.redirect('/contenido_curso/' + req.params.idC);
       }
    });
-   con1.end();
+   con1.end({timeout: 60000});
 }
 
 module.exports.recupera_credenciales = function (req, res){
@@ -1830,21 +1830,21 @@ module.exports.recupera_credenciales = function (req, res){
                                        }
                                     }
                               });
-                              con4.end();
+                              con4.end({timeout: 60000});
                            }
                         });
-                        con3.end();
+                        con3.end({timeout: 60000});
                      }
                   }
                });
-               con2.end();
+               con2.end({timeout: 60000});
             }
          }else{
             res.render('pass_olvidado', {error: true, guardado: false});
          }
       }
    });
-   con.end();
+   con.end({timeout: 60000});
 }
 
 //modulos en desarrollo
