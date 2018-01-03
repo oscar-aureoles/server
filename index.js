@@ -142,6 +142,8 @@ app.get('/usuario/:usuario_id', function (req, res) {
 
 app.post('/modificar_usuario', function (req, res){
    if ((require("./js_server/validaTipoUser.js")).esAdmin(req, res)) {
+      console.log("DATOS FOTO");
+      console.log(req.files.foto);
       var ruta = 'asset/asset_fotoPerfilUsers/' + req.body.curp + db_codigo.getFirstFileName2(req.files.foto.name);;
          //ruta temporal, puede ser algo así C:\Users\User\AppData\Local\Temp\7056-12616ij.png
          var temporalPath = req.files.foto.path;
