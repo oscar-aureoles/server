@@ -1276,7 +1276,7 @@ module.exports.ver_avisos = function (req, res){
 }
 
 module.exports.nuevo_aviso = function (req, res){
-   var sql = "insert into aviso values (null, '"+req.body.nombre+"', '"+req.body.descripcion+"', '"+new Date(req.body.fecha).toLocaleString()+"', 2)";
+   var sql = "insert into aviso values (null, '"+req.body.nombre+"', '"+req.body.descripcion+"', '"+new Date(req.body.fecha).toLocaleString()+"', 11)";
    var con = conexion();
    con.query(sql, function(error, filas){
       if (error) {
