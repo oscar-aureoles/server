@@ -663,6 +663,8 @@ module.exports.modificar_usuario = function (req, res){
    } else{
       fecha_asignacion = "'" + new Date(req.body.fecha_asignacion).toLocaleString() + "'";
    }
+   console.log("DATOS");
+   console.log(req.body);
    var sql = "update usuario set nombre = '" + req.body.nombre + "', apellido_paterno ='" + req.body.apellido_paterno + 
       "', apellido_materno = '" + req.body.apellido_materno + "', email = '" + req.body.email + "', cct = '" + 
       req.body.cct + "', id_nivel_educativo = " + req.body.nivel_educativo + ", id_funcion = " + req.body.funcion + 
