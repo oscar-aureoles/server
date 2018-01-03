@@ -150,7 +150,11 @@ app.post('/modificar_usuario', function (req, res){
          var finalPath = './public/asset/asset_fotoPerfilUsers/' + req.body.curp + db_codigo.getFirstFileName2(req.files.foto.name);
          //si la extension no está permitida salimos con un mensaje
          if(db_codigo.checkExtension(req.files.foto.name) === false){
-            res.send('Formato No Valido');
+            if (req.files.foto == undefined) {
+               db_codigo.modificar_usuario(req, res);
+            }else{
+               res.send('Formato No Valido');
+            }
          }else{
             db_codigo.modificar_usuario(req, res);
             mv(temporalPath, finalPath, function(err) {
