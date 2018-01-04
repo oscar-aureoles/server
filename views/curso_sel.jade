@@ -200,7 +200,7 @@ html
                 |                 
                 tbody#body_tabla_grupo
                   each item in cursoSelec.grupos
-                    tr(id='miembros#{item.id_grupo}' onclick='seleccionar_fila(id);')
+                    tr(id='miembros#{item.id_grupo}' onclick='seleccionar_fila(#{item.id_grupo});')
                       td(style='text-align: center;') #{item.id_grupo}
                       |                     
                       td(style='text-align: center;') #{item.nombre_grupo}
