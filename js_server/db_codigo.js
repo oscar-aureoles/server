@@ -1579,7 +1579,7 @@ module.exports.mensajes = function (req, res, curp_mensaje){
                var numMensajes = 0;
                var listaUsuariosMensaje = new Array();
                if (error3) {
-                  console.log('Error - obtener numero de mensajes');
+                  console.log('Error - obtener numero de mensajes ' + error3);
                   res.end();
                }else{
                   for (var i = 0; i <= filas3.length - 1; i++) {
@@ -1688,6 +1688,7 @@ module.exports.verMensajeLeido = function (req, res){
 }
 
 module.exports.nuevo_mensaje = function (req, res){
+   console.log('ENTRA ENVIAR MENSAJE');
    var con = conexion();
    con.query('insert into mensaje values(null, ?, NOW(), ?, ?, ?);',[req.body.text_mensaje, req.session.user.curp, req.body.curp_usuario_sel, 0], function (error, filas){
       if (error) {
