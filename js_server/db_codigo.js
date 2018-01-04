@@ -2042,7 +2042,7 @@ module.exports.reportes = function (req, res){
                                                       res.render('reportes', {titulo: 'REPORTES', datos: datos});
                                                    }
                                                 });
-                                                con7.end();
+                                                con7.end({timeout: 60000});
                                              }else{//Se eligio una semana
                                                 var sqlX = 'select id_actividad, nombre_titulo, curp_usuario, status_actividad from actividad_usuario join actividad on actividad.id = id_actividad where id_sesion = ' + datos.id_sesionSel + ' and (' + listaCurUsuarios.substr(0, (listaCurUsuarios.length-4)) + ')';
                                                 var con7 = conexion();
@@ -2086,11 +2086,11 @@ module.exports.reportes = function (req, res){
                                                       res.render('reportes', {titulo: 'REPORTES', datos: datos});
                                                    }
                                                 });
-                                                con7.end();
+                                                con7.end({timeout: 60000});
                                              }
                                           }
                                        });
-                                       con6.end();
+                                       con6.end({timeout: 60000});
                                     }
 
                                  }else{
@@ -2098,22 +2098,22 @@ module.exports.reportes = function (req, res){
                                  }
                               }
                            });
-                           con5.end();
+                           con5.end({timeout: 60000});
                         }else{
                            res.render('reportes', {titulo: 'REPORTES', datos: datos});
                         }
                      }
                   });
-                  con4.end();
+                  con4.end({timeout: 60000});
                }else{
                   res.render('reportes', {titulo: 'REPORTES', datos: datos});
                }
            }
           });
-          con3.end();
+          con3.end({timeout: 60000});
       }
    });
-   con2.end();
+   con2.end({timeout: 60000});
 }
 
 module.exports.pagina_principal = function (req, res){
@@ -2223,10 +2223,10 @@ module.exports.tarea_tutorado = function(req, res, status, ruta){
                   res.render('subir_tarea', {titulo: titulo, datos: datos});
                }
             });
-            con2.end();            
+            con2.end({timeout: 60000});            
          }
       });
-      con1.end();
+      con1.end({timeout: 60000});
 }
 
 function actualizarStatusTarea(req, ruta){
@@ -2238,7 +2238,7 @@ function actualizarStatusTarea(req, ruta){
          res.end();
       }
    });
-   con.end();
+   con.end{timeout: 60000}();
 }
 
 module.exports.actualizarStatusTareaTutor = function (req){
@@ -2250,7 +2250,7 @@ module.exports.actualizarStatusTareaTutor = function (req){
          res.end();
       }
    });
-   con.end();
+   con.end({timeout: 60000});
 }
 
 module.exports.tarea_tutor = function(req, res, status, ruta){
@@ -2328,13 +2328,13 @@ module.exports.tarea_tutor = function(req, res, status, ruta){
                      res.render('ver_tarea', {titulo: titulo, datos: datos});
                   }
                });
-               con3.end();
+               con3.end({timeout: 60000});
             }
          });
-         con2.end();
+         con2.end({timeout: 60000});
       }
    });
-   con1.end();
+   con1.end({timeout: 60000});
 }
 
 

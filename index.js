@@ -272,6 +272,7 @@ app.get('/contenido_curso/:id', function (req, res) {
 
 app.post('/nuevo_mensaje', function (req, res) {
    if (req.session.user) {
+       console.log("Enviar Mensaje Nuevo ");
       db_codigo.nuevo_mensaje(req, res);
    }else{
       res.redirect('/login');
