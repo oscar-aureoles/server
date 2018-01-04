@@ -948,12 +948,14 @@ function curso(req, res, curso_sel, grupo_sel, opcion){
                                     }else{//mostramos un dialog on los miembros del gruo seleionado
                                        var con5 = conexion();
                                        con5.query("select id_grupo, nombre_grupo, curp_tutorado, CONCAT(nombre, ' ', apellido_paterno, ' ', apellido_materno) as nombreTutorado from grupo_usuario join usuario on curp_tutorado = curp join grupo on id_grupo = id where id_grupo = ?", [grupo_sel], function(errorL, filasL){
+                                          console.log("ID GRUPO " + grupo_sel);
                                           var listaTutoradosGrupo = '';
                                           var listaTutoradosGrupoX = [];
                                           if (errorL){
                                              console.log("Error. consulta selec curso /curso grupo_sel " + errorL);
                                              res.end();
                                           }else{
+                                             console.log("FILAS NUM " + filasL.length);
                                              var titulo = 'Sin Miembros';
                                              for (var i = 0; i <= filasL.length - 1; i++) {
                                                 listaTutoradosGrupo += "Curp: " + filasL[i].curp_tutorado + " \\n-Nombre: " + filasL[i].nombreTutorado;
