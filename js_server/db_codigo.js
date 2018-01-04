@@ -2238,7 +2238,7 @@ function actualizarStatusTarea(req, ruta){
          res.end();
       }
    });
-   con.end{timeout: 60000}();
+   con.end({timeout: 60000});
 }
 
 module.exports.actualizarStatusTareaTutor = function (req){
