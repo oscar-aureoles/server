@@ -1191,7 +1191,7 @@ module.exports.calendario = function (req, res, id_aviso){
                   esAutoridadEducativa: esAdmin
                };
                if (id_aviso != undefined) {//se ha seleccionado ningun aviso del calendario
-                  var sql = 'select id, nombre_aviso, descripcion, DATE_FORMAT(fecha, \'%d-%m-%Y\') as fecha from aviso where id = ? or fecha = (select fecha from aviso where id = ?) and id_tipo_aviso = 2';
+                  var sql = 'select id, nombre_aviso, descripcion, DATE_FORMAT(fecha, \'%d-%m-%Y\') as fecha from aviso where id = ? or fecha = (select fecha from aviso where id = ?) and id_tipo_aviso = 11';
                   var con4 = conexion();
                   con4.query(sql, [id_aviso, id_aviso], function(errorAs, filasAs){
                      if (errorAv) {
